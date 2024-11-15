@@ -1,13 +1,19 @@
 Package: miceDRF
 Type: Package
-Title: This package contains miceDRF imputation method and tools for scoring
-  imputation performance
+Title: MICE and Distributional Random Forest for Imputation
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+          person("Krystyna", "Grzesiak", 
+               email = "krygrz11@gmail.com", 
+               comment = c(ORCID = "0000-0003-2581-7722"),
+               role = c("aut", "ctb")),
+          person("Jeffrey", "Näf", 
+               email = "jeffrey@my-sh.ch", 
+               comment = c(ORCID = "..."),
+               role = c("aut", "cre")))
+Description: This package contains miceDRF imputation method and tools for 
+    measuring imputation performance.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/KrystynaGrzesiak/miceDRF
