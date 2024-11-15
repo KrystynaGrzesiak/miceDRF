@@ -12,5 +12,6 @@ LazyData: true
 URL: https://github.com/KrystynaGrzesiak/miceDRF
 BugReports: https://github.com/KrystynaGrzesiak/miceDRF/issues
 Imports:
+  drf,
   scoringRules
 RoxygenNote: 7.3.2
