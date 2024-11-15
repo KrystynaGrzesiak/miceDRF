@@ -13,8 +13,9 @@ LazyData: true
 URL: https://github.com/KrystynaGrzesiak/miceDRF
 BugReports: https://github.com/KrystynaGrzesiak/miceDRF/issues
 Imports:
-  drf,
-  scoringRules
+    drf,
+    energy,
+    scoringRules
 RoxygenNote: 7.3.2
 Suggests: 
     spelling
