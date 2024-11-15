@@ -1,6 +1,7 @@
 Package: miceDRF
 Type: Package
-Title: What the Package Does (Title Case)
+Title: This package contains miceDRF imputation method and tools for scoring
+  imputation performance
 Version: 0.1.0
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
@@ -15,3 +16,6 @@ Imports:
   drf,
   scoringRules
 RoxygenNote: 7.3.2
+Suggests: 
+    spelling
+Language: en-US
