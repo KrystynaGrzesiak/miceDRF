@@ -24,5 +24,7 @@ Imports:
     scoringRules
 RoxygenNote: 7.3.2
 Suggests: 
-    spelling
+    spelling,
+    testthat (>= 3.0.0)
 Language: en-US
+Config/testthat/edition: 3
