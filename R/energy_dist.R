@@ -15,8 +15,6 @@
 #' energy_dist(X, X_imp)
 #'
 #' @export
-#'
-
 
 energy_dist <- function(X, X_imp)
   energy::eqdist.e(rbind(X, X_imp), c(nrow(X), nrow(X_imp)))
