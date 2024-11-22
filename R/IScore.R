@@ -10,7 +10,7 @@
 
 create_mice_imputations <- function(methods, maxit = 5) {
   imputation_funcs <- lapply(methods, function(ith_method) {
-    function(X, m, maxit = 5) {
+    function(X, m = 1, maxit = 5) {
       imp_dat <- mice(X, m = m, method = ith_method, printFlag = FALSE,
                       visitSequence = "arabic", maxit = maxit)
       mice::complete(imp_dat, action = "all")
@@ -93,7 +93,7 @@ Iscores_new <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
 Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
 
   if (is.null(X_imp))
-    X_imp <- imputation_func(X = X, m = 1)[[1]]
+    X_imp <- imputation_func(X)[[1]]
 
   X <- as.matrix(X)
   X_imp <- as.matrix(X_imp)
