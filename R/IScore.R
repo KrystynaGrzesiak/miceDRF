@@ -72,9 +72,9 @@ Iscores_new <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
     X_imp <- imputations[[ith_method]][[1]]
 
     data.frame(method = ith_method,
-               Iscores_new_perimp(X, X_imp = X_imp, N = N,
-                                  imputation_func = imputation_funcs[[ith_method]],
-                                  max_length = max_length))
+               Iscore(X, X_imp = X_imp, N = N,
+                      imputation_func = imputation_funcs[[ith_method]],
+                      max_length = max_length))
   }) |>
     do.call(rbind, args = _)
 }
@@ -84,11 +84,13 @@ Iscores_new <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
 #'
 #' @importFrom scoringRules crps_sample
 #'
-#' @keywords internal
+#' @inheritParams Iscores_new
+#'
+#' @export
 #'
 
 
-Iscores_new_perimp <- function(X, X_imp, N = 50, imputation_func, max_length = NULL){
+Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
 
   if (is.null(X_imp))
     X_imp <- imputation_func(X = X, m = 1)[[1]]
