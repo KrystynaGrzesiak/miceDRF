@@ -55,14 +55,14 @@ create_mice_imputations <- function(methods, maxit = 5) {
 #' X[c(runif(700), rep(1, 300)) < 0.3] <- NA
 #' methods <- c("pmm", "cart", "sample", "norm.nob")
 #' imputation_funcs <- create_mice_imputations(methods)
-#' Iscores_new(X, N = 50, imputation_funcs)
+#' Iscores(X, N = 50, imputation_funcs)
 #'
 #' @export
 #'
 
 
-Iscores_new <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
-                        max_length = NULL){
+Iscores <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
+                    max_length = NULL){
 
   methods_names <- names(imputation_funcs)
 
@@ -71,10 +71,13 @@ Iscores_new <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
 
     X_imp <- imputations[[ith_method]][[1]]
 
+    single_res <- Iscore(X, X_imp = X_imp, N = N,
+                         imputation_func = imputation_funcs[[ith_method]],
+                         max_length = max_length)
+
     data.frame(method = ith_method,
-               Iscore(X, X_imp = X_imp, N = N,
-                      imputation_func = imputation_funcs[[ith_method]],
-                      max_length = max_length))
+               attr(single_res, "dat"),
+               weighted_score = as.numeric(single_res))
   }) |>
     do.call(rbind, args = _)
 }
@@ -107,7 +110,6 @@ Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
   M <- is.na(X)
 
   dim_with_NA <- missings_per_col[missings_per_col > 0]
-  dim_with_NA_ord <- order(missings_per_col[missings_per_col > 0], decreasing = T)
 
   if (is.null(max_length)) max_length <- length(dim_with_NA)
 
@@ -116,7 +118,7 @@ Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
     max_length <- sum(dim_with_NA)
   }
 
-  scores_dat <- lapply(dim_with_NA_ord, function(j) {
+  scores_dat <- lapply(order(dim_with_NA, decreasing = TRUE), function(j) {
 
     weight <- (dim_with_NA[j] / n) * ((n - dim_with_NA[j]) / n)
 
@@ -161,6 +163,6 @@ Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
   weighted_score <- sum(scores_dat[["score"]] * scores_dat[["weight"]] /
                           (sum(scores_dat[["weight"]], na.rm = T)), na.rm = T)
 
-  data.frame(scores_dat,
-             weighted_score = weighted_score)
+  attr(weighted_score, "dat") <- scores_dat
+  weighted_score
 }
