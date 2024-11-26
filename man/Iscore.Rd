@@ -6,6 +6,15 @@
 \usage{
 Iscore(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL)
 }
+\arguments{
+\item{X}{data containing missing values denoted with NAs}
+
+\item{N}{a numeric value. Number of samples from imputation distribution H.
+Default to 50.}
+
+\item{max_length}{Maximum number of variables \eqn{X_j} to consider, can
+speed up the code}
+}
 \description{
 Calculates score for a single imputation function
 }

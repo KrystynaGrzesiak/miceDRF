@@ -87,7 +87,7 @@ Iscores <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
 #'
 #' @importFrom scoringRules crps_sample
 #'
-#' @inheritParams Iscores_new
+#' @inheritParams Iscores
 #'
 #' @export
 #'

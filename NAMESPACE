@@ -3,6 +3,7 @@
 export(Iscore)
 export(Iscores)
 export(energy_dist)
+export(impute_mice_drf)
 export(mice.impute.DRF)
 importFrom(drf,drf)
 importFrom(energy,eqdist.e)

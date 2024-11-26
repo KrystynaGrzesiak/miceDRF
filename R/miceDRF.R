@@ -3,19 +3,16 @@
 #'
 #' This function performs imputation using MICE and Distributional Random Forest
 #'
-#' @importFrom drf drf
+#' @param missdf incomplete dataset
+#' @param printFlag logical, indicating whether silent computations should be
+#' performed. Default to FALSE.
 #'
-#' @param y words, words...
-#' @param ry words, words...
-#' @param x words, words...
-#' @param wy words, words...
-#' @param min.node.size words, words...
-#' @param num.features words, words...
-#' @param num.trees words, words...
-#'
-#' @return
+#' @return completed dataset
 #'
 #' @examples
+#' X <- matrix(rnorm(1000), nrow = 100)
+#' X[c(runif(700), rep(1, 300)) < 0.3] <- NA
+#' impute_mice_drf(X)
 #'
 #' @references
 #' This method is described in detail in:
@@ -31,11 +28,52 @@
 #' distributional regression. Journal of Machine Learning Research, 23(333):1–79.
 #'
 #' @export
+
+impute_mice_drf <- function (missdf, printFlag = FALSE, ...) {
+
+  args <- list(...)
+  args <- args[setdiff(names(args), c("data", "method", "printFlag"))]
+
+  args <- c(list(data = missdf, method = "DRF", printFlag = printFlag), args)
+
+  imputed <- do.call(mice::mice, args)
+
+  mice::complete(imputed)
+}
+
+
+#' mice DRF (Distributional Random Forest)
 #'
+#' This function performs imputation using MICE and Distributional Random Forest
+#'
+#' @importFrom drf drf
+#'
+#' @param y words, words...
+#' @param ry words, words...
+#' @param x words, words...
+#' @param wy words, words...
+#' @param min.node.size words, words...
+#' @param num.features words, words...
+#' @param num.trees words, words...
+#'
+#' @references
+#' This method is described in detail in:
+#'
+#' Näf, J., Scornet, E., & Josse, J. (2024).
+#' What is a good imputation under MAR missingness?. arXiv.
+#' \url{https://arxiv.org/abs/2403.19196}
+#'
+#' It's based on:
+#'
+#' Cevid, D., Michel, L., Näf, J., Meinshausen, N., and B¨ uhlmann, P. (2022).
+#' Distributional random forests: Heterogeneity adjustment and multivariate
+#' distributional regression. Journal of Machine Learning Research, 23(333):1–79.
+#'
+#' @export
 
 
 mice.impute.DRF <- function (y, ry, x, wy = NULL, min.node.size = 1,
-                            num.features = 10, num.trees = 10) {
+                            num.features = 10, num.trees = 10, ...) {
 
   if (is.null(wy)) wy <- !ry
 
