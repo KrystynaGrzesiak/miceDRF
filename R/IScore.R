@@ -36,7 +36,6 @@ create_mice_imputation <- function(method) {
 #' @export
 #'
 
-
 Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
 
   if (is.null(X_imp))
