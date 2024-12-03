@@ -4,7 +4,7 @@
 \alias{Iscore}
 \title{Calculates score for a single imputation function}
 \usage{
-Iscore(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL)
+Iscore(X, N = 50, imputation_func, max_length = NULL)
 }
 \description{
 Calculates score for a single imputation function

@@ -36,13 +36,10 @@ create_mice_imputation <- function(method) {
 #' @export
 #'
 
-Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
+Iscore <- function(X, N = 50, imputation_func, max_length = NULL){
 
-  if (is.null(X_imp))
-    X_imp <- imputation_func(X)
-
-  X <- as.matrix(X)
-  X_imp <- as.matrix(X_imp)
+  X <- as.data.frame(X, check.names = FALSE)
+  X_imp <- as.data.frame(imputation_func(X), check.names = FALSE)
 
   n <- nrow(X)
 
@@ -91,7 +88,7 @@ Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
     }
 
     # Train DRF on imputed data
-    X_artificial <- rbind(cbind(NA, X_test), cbind(Y_train, X_train))
+    X_artificial <- rbind(cbind(y = NA, X_test), cbind(y = Y_train, X_train))
 
     imputation_list <- lapply(1:N, function(ith_imputation) {
       imputation_func(X_artificial)
@@ -108,7 +105,10 @@ Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
     do.call(rbind, args = _)
 
   weighted_score <- sum(scores_dat[["score"]] * scores_dat[["weight"]] /
-                          (sum(scores_dat[["weight"]], na.rm = T)), na.rm = T)
+                          (sum(scores_dat[["weight"]], na.rm = TRUE)),
+                        na.rm = TRUE)
+
+  weighted_score <- ifelse(all(is.na(scores_dat[["score"]])), NA, weighted_score)
 
   attr(weighted_score, "dat") <- scores_dat
   weighted_score
