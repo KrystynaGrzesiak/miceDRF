@@ -21,6 +21,7 @@ BugReports: https://github.com/KrystynaGrzesiak/miceDRF/issues
 Imports:
     drf,
     energy,
+    mice,
     scoringRules
 RoxygenNote: 7.3.2
 Suggests: 

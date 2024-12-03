@@ -6,15 +6,13 @@
 \usage{
 Iscore(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL)
 }
-\arguments{
-\item{X}{data containing missing values denoted with NAs}
-
-\item{N}{a numeric value. Number of samples from imputation distribution H.
-Default to 50.}
-
-\item{max_length}{Maximum number of variables \eqn{X_j} to consider, can
-speed up the code}
-}
 \description{
 Calculates score for a single imputation function
+}
+\examples{
+X <- matrix(rnorm(1000), nrow = 100)
+X[c(runif(700), rep(1, 300)) < 0.3] <- NA
+imputation_func <- miceDRF:::create_mice_imputation("pmm")
+Iscore(X, N = 50, imputation_func = imputation_func)
+
 }

@@ -1,86 +1,24 @@
 
 #' Very internal function for getting mice methods
 #'
+#' @importFrom mice mice
+#' @importFrom mice complete
+#'
 #' @examples
-#' methods <- c("pmm", "cart", "sample", "norm.nob", "DRF")
+#' methods <- "pmm"
 #' imputation_funcs <- create_mice_imputations(methods)
 #'
 #' @keywords internal
 #'
 
-create_mice_imputations <- function(methods, maxit = 5) {
-  imputation_funcs <- lapply(methods, function(ith_method) {
-    function(X, m = 1, maxit = 5) {
-      imp_dat <- mice(X, m = m, method = ith_method, printFlag = FALSE,
-                      visitSequence = "arabic", maxit = maxit)
-      mice::complete(imp_dat, action = "all")
-    }
-  })
-  names(imputation_funcs) <- methods
-  imputation_funcs
+create_mice_imputation <- function(method) {
+  function(X) {
+    imp_dat <- mice(X, m = 1, method = method, printFlag = FALSE,
+                    visitSequence = "arabic")
+    mice::complete(imp_dat, action = "all")[[1]]
+  }
 }
 
-
-#' IScore
-#'
-#' This function... TODO: details
-#'
-#' @param X data containing missing values denoted with NAs
-#'
-#' @param N a numeric value. Number of samples from imputation distribution H.
-#' Default to 50.
-#'
-#' @param imputation_funcs A list of functions, whereby each
-#' `imputation_funcs[[method]]` is a function that takes the arguments \code{X}
-#' and \code{m} and imputes \code{X} \code{m} times using method:
-#' \code{imputations = imputation_funcs[[method]](X,m)}. Default to NULL meaning
-#' ... TODO::
-#'
-#' @param imputations Either \code{NULL} or a list of imputations for the
-#' methods considered, each imputed \code{X} saved as
-#' \code{imputations[[method]]}, whereby method is a string. Default to
-#' \code{NULL}.
-#'
-#' @param max_length Maximum number of variables \eqn{X_j} to consider, can
-#' speed up the code
-#'
-#' @return a list of scores calculated for every imputation function from
-#' \code{imputation_funcs}. Each result consists of two elements:
-#'
-#' - a weighted score,
-#' - a table with scores calculated for particular columns.
-#'
-#' @examples
-#' X <- matrix(rnorm(1000), nrow = 100)
-#' X[c(runif(700), rep(1, 300)) < 0.3] <- NA
-#' methods <- c("pmm", "cart", "sample", "norm.nob")
-#' imputation_funcs <- create_mice_imputations(methods)
-#' Iscores(X, N = 50, imputation_funcs)
-#'
-#' @export
-#'
-
-
-Iscores <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
-                    max_length = NULL){
-
-  methods_names <- names(imputation_funcs)
-
-  lapply(methods_names, function(ith_method) {
-    print(paste0("Evaluating method ", ith_method))
-
-    X_imp <- imputations[[ith_method]][[1]]
-
-    single_res <- Iscore(X, X_imp = X_imp, N = N,
-                         imputation_func = imputation_funcs[[ith_method]],
-                         max_length = max_length)
-
-    data.frame(method = ith_method,
-               attr(single_res, "dat"),
-               weighted_score = as.numeric(single_res))
-  }) |>
-    do.call(rbind, args = _)
-}
 
 
 #' @title Calculates score for a single imputation function
@@ -89,6 +27,12 @@ Iscores <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
 #'
 #' @inheritParams Iscores
 #'
+#' @examples
+#' X <- matrix(rnorm(1000), nrow = 100)
+#' X[c(runif(700), rep(1, 300)) < 0.3] <- NA
+#' imputation_func <- miceDRF:::create_mice_imputation("pmm")
+#' Iscore(X, N = 50, imputation_func = imputation_func)
+#'
 #' @export
 #'
 
@@ -96,7 +40,7 @@ Iscores <- function(X, N = 50, imputation_funcs = NULL, imputations = NULL,
 Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
 
   if (is.null(X_imp))
-    X_imp <- imputation_func(X)[[1]]
+    X_imp <- imputation_func(X)
 
   X <- as.matrix(X)
   X_imp <- as.matrix(X_imp)
@@ -149,7 +93,11 @@ Iscore <- function(X, X_imp = NULL, N = 50, imputation_func, max_length = NULL){
 
     # Train DRF on imputed data
     X_artificial <- rbind(cbind(NA, X_test), cbind(Y_train, X_train))
-    imputation_list <- imputation_func(X = X_artificial , m = N)
+
+    imputation_list <- lapply(1:N, function(ith_imputation) {
+      imputation_func(X_artificial)
+    })
+
     Y_matrix <- do.call(cbind, lapply(imputation_list, function(x)  x[1:length(Y_test), 1]))
 
     score_j <- -mean(scoringRules::crps_sample(y = Y_test, dat = Y_matrix))
