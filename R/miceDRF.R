@@ -3,9 +3,10 @@
 #'
 #' This function performs imputation using MICE and Distributional Random Forest
 #'
-#' @param missdf incomplete dataset
+#' @param missdf incomplete dataset with missing values denoted as NA's
 #' @param printFlag logical, indicating whether silent computations should be
 #' performed. Default to FALSE.
+#' @param ... used for compatibility with mice package.
 #'
 #' @return completed dataset
 #'
@@ -85,13 +86,6 @@ mice.impute.DRF <- function (y, ry, x, wy = NULL, min.node.size = 1,
   xobs <- x[ry, , drop = FALSE]
   xmis <- x[wy, , drop = FALSE]
   yobs <- as.matrix(y[ry])
-
-  # args<-list(...)
-  # if ("m" %in% names(args)){
-  #   m<-args$m
-  # }else{
-  #   m=1
-  # }
 
   m <- 1
 

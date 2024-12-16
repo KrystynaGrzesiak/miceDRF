@@ -7,10 +7,12 @@
 impute_mice_drf(missdf, printFlag = FALSE, ...)
 }
 \arguments{
-\item{missdf}{incomplete dataset}
+\item{missdf}{incomplete dataset with missing values denoted as NA's}
 
 \item{printFlag}{logical, indicating whether silent computations should be
 performed. Default to FALSE.}
+
+\item{...}{used for compatibility with mice package.}
 }
 \value{
 completed dataset

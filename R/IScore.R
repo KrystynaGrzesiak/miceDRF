@@ -25,21 +25,49 @@ create_mice_imputation <- function(method) {
 #'
 #' @importFrom scoringRules crps_sample
 #'
-#' @inheritParams Iscores
+#' @param X data containing missing values denoted with NA's
+#' @param X_imp imputed dataset.
+#' @param imputation_func a function that imputes data
+#' @param N a numeric value. Number of samples from imputation distribution H.
+#' Default to 50.
+#' @param max_length Maximum number of variables \eqn{X_j} to consider, can
+#' speed up the code. Default to \code{NULL} meaning that all the columns will
+#' be taken under consideration.
+#' @param multiple a logical indicating whether provided imputation method is a
+#' multiple imputation approach (i.e. it generates different values to impute
+#' for each call). Default to TRUE. Note that if multiple equals to FALSE, N is
+#' automatically set to 1.
+#'
+#' @return a numerical value denoting weighted Imputation Score obtained for
+#' provided imputation function and a table with scores and weights calculated
+#' for particular columns.
 #'
 #' @examples
 #' X <- matrix(rnorm(1000), nrow = 100)
 #' X[c(runif(700), rep(1, 300)) < 0.3] <- NA
 #' imputation_func <- miceDRF:::create_mice_imputation("pmm")
-#' Iscore(X, N = 50, imputation_func = imputation_func)
+#' X_imp <- imputation_func(X)
+#'
+#' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
+#'
+#' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
+#'
+#' # zero imputation
+#' imputation_func <- function(X) {X[is.na(X)] <- 0; X}
+#' X_imp <- imputation_func(X)
+#'
+#' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
 #'
 #' @export
 #'
 
-Iscore <- function(X, N = 50, imputation_func, max_length = NULL){
+Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
+                   max_length = NULL){
+
+  N <- ifelse(multiple, N, 1)
 
   X <- as.data.frame(X, check.names = FALSE)
-  X_imp <- as.data.frame(imputation_func(X), check.names = FALSE)
+  X_imp <- as.data.frame(X_imp, check.names = FALSE)
 
   n <- nrow(X)
 
@@ -95,7 +123,6 @@ Iscore <- function(X, N = 50, imputation_func, max_length = NULL){
     })
 
     Y_matrix <- do.call(cbind, lapply(imputation_list, function(x)  x[1:length(Y_test), 1]))
-
     score_j <- -mean(scoringRules::crps_sample(y = Y_test, dat = Y_matrix))
 
     data.frame(column_id = j,
