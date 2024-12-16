@@ -119,8 +119,17 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
     X_artificial <- rbind(cbind(y = NA, X_test), cbind(y = Y_train, X_train))
 
     imputation_list <- lapply(1:N, function(ith_imputation) {
-      imputation_func(X_artificial)
+      imputed <- try({imputation_func(X_artificial)})
+
+      if(inherits(imputed, "try-error")) break
+
+      imputed
     })
+
+    if(length(imputation_list) < N) {
+      warning("Unsuccessful imputation! Imputation function is unstable! Returning NA!")
+      return(data.frame(column_id = j, weight = weight, score = NA, weighted_score = NA)) # return score = NA
+    }
 
     Y_matrix <- do.call(cbind, lapply(imputation_list, function(x)  x[1:length(Y_test), 1]))
     score_j <- -mean(scoringRules::crps_sample(y = Y_test, dat = Y_matrix))
