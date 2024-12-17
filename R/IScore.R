@@ -53,10 +53,12 @@ create_mice_imputation <- function(method) {
 #' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
 #'
 #' # zero imputation
+#' X <- matrix(rnorm(1000), nrow = 100)
+#' X[c(runif(1000) < 0.3)] <- NA
 #' imputation_func <- function(X) {X[is.na(X)] <- 0; X}
 #' X_imp <- imputation_func(X)
 #'
-#' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
+#' Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
 #'
 #' @export
 #'
@@ -119,9 +121,11 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
     X_artificial <- rbind(cbind(y = NA, X_test), cbind(y = Y_train, X_train))
 
     imputation_list <- lapply(1:N, function(ith_imputation) {
+
       imputed <- try({imputation_func(X_artificial)})
 
-      if(inherits(imputed, "try-error")) break
+      if(inherits(imputed, "try-error"))
+        return(NA)
 
       imputed
     })
@@ -149,3 +153,4 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
   attr(weighted_score, "dat") <- scores_dat
   weighted_score
 }
+
