@@ -25,7 +25,7 @@ This function performs imputation using MICE and Distributional Random Forest
 \examples{
 X <- matrix(rnorm(1000), nrow = 100)
 X[c(runif(700), rep(1, 300)) < 0.3] <- NA
-impute_mice_drf(X)
+impute_mice_drf(X, printFlag = TRUE)
 
 }
 \references{

@@ -14,7 +14,7 @@
 #' @examples
 #' X <- matrix(rnorm(1000), nrow = 100)
 #' X[c(runif(700), rep(1, 300)) < 0.3] <- NA
-#' impute_mice_drf(X)
+#' impute_mice_drf(X, printFlag = TRUE)
 #'
 #' @references
 #' This method is described in detail in:
@@ -35,6 +35,13 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
 
   args <- list(...)
   args <- args[setdiff(names(args), c("data", "method", "printFlag"))]
+
+  factor_vars <- sapply(missdf, is.factor)
+
+  if(any(factor_vars)){
+    warning("Changing factor to numeric.")
+    missdf[, factor_vars] <- apply(data.frame(missdf[, factor_vars]), 2, as.numeric)
+  }
 
   args <- c(list(data = missdf, method = "DRF", printFlag = printFlag, m = m), args)
 
