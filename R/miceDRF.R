@@ -36,7 +36,7 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
   args <- list(...)
   args <- args[setdiff(names(args), c("data", "method", "printFlag"))]
 
-  args <- c(list(data = missdf, method = "DRF", printFlag = printFlag), args)
+  args <- c(list(data = missdf, method = "DRF", printFlag = printFlag, m = m), args)
 
   imputed <- do.call(mice::mice, args)
 
