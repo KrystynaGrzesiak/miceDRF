@@ -44,9 +44,11 @@ miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
 miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
 
 # zero imputation
+X <- matrix(rnorm(1000), nrow = 100)
+X[c(runif(1000) < 0.3)] <- NA
 imputation_func <- function(X) {X[is.na(X)] <- 0; X}
 X_imp <- imputation_func(X)
 
-miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
+Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
 
 }

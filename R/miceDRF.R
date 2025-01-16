@@ -6,6 +6,7 @@
 #' @param missdf incomplete dataset with missing values denoted as NA's
 #' @param printFlag logical, indicating whether silent computations should be
 #' performed. Default to FALSE.
+#' @param m number of imputed datasets to generate
 #' @param ... used for compatibility with mice package.
 #'
 #' @return completed dataset
@@ -30,7 +31,7 @@
 #'
 #' @export
 
-impute_mice_drf <- function (missdf, printFlag = FALSE, ...) {
+impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
 
   args <- list(...)
   args <- args[setdiff(names(args), c("data", "method", "printFlag"))]

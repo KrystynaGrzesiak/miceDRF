@@ -4,13 +4,15 @@
 \alias{impute_mice_drf}
 \title{mice DRF (Distributional Random Forest)}
 \usage{
-impute_mice_drf(missdf, printFlag = FALSE, ...)
+impute_mice_drf(missdf, printFlag = FALSE, m = 1, ...)
 }
 \arguments{
 \item{missdf}{incomplete dataset with missing values denoted as NA's}
 
 \item{printFlag}{logical, indicating whether silent computations should be
 performed. Default to FALSE.}
+
+\item{m}{number of imputed datasets to generate}
 
 \item{...}{used for compatibility with mice package.}
 }
