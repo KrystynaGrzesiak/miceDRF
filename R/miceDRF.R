@@ -40,7 +40,9 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
 
   if(any(factor_vars)){
     warning("Changing factor to numeric.")
+    column_names <- colnames(missdf)
     missdf[, factor_vars] <- apply(data.frame(missdf[, factor_vars]), 2, as.numeric)
+    colnames(missdf) <- column_names
   }
 
   args <- c(list(data = missdf, method = "DRF", printFlag = printFlag, m = m), args)
