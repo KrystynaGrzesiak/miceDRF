@@ -36,13 +36,13 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
   args <- list(...)
   args <- args[setdiff(names(args), c("data", "method", "printFlag"))]
 
-  factor_vars <- sapply(missdf, is.factor)
+  factor_vars <- as.vector(sapply(missdf, is.factor))
 
   if(any(factor_vars)){
     warning("Changing factor to numeric.")
-    column_names <- colnames(missdf)
-    missdf[, factor_vars] <- apply(data.frame(missdf[, factor_vars]), 2, as.numeric)
-    colnames(missdf) <- column_names
+    missdf[] <- lapply(missdf, function(col) {
+      if (is.factor(col)) as.numeric(col) else col
+    })
   }
 
   args <- c(list(data = missdf, method = "DRF", printFlag = printFlag, m = m), args)
