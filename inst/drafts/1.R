@@ -82,6 +82,6 @@ X_miss[runif(1000) < 0.1] <- NA
 imputation_func <- miceDRF:::create_mice_imputation("pmm")
 X_imp <- imputation_func(X_miss)
 
-miceDRF::Iscore(X_miss, X_imp, N = 50, imputation_func = imputation_func)
+res <- miceDRF::Iscore(X_miss, X_imp, N = 50, imputation_func = imputation_func)
 
 
