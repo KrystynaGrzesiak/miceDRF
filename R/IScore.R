@@ -43,9 +43,15 @@ create_mice_imputation <- function(method) {
 #' for particular columns.
 #'
 #' @examples
+#' set.seed(111)
 #' X <- matrix(rnorm(1000), nrow = 100)
-#' X[c(runif(700), rep(1, 300)) < 0.3] <- NA
+#' X[runif(1000) < 0.4] <- NA
 #' imputation_func <- miceDRF:::create_mice_imputation("pmm")
+#' X_imp <- imputation_func(X)
+#'
+#' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
+#'
+#' imputation_func <- miceDRF:::create_mice_imputation("mean")
 #' X_imp <- imputation_func(X)
 #'
 #' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
@@ -73,10 +79,9 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
 
   n <- nrow(X)
 
-  ## Reoder the data according to the number of missing values (least missing first)
   missings_per_col <- colSums(is.na(X))
 
-  ## Miss pattern
+  ## Missings pattern
   M <- is.na(X)
 
   dim_with_NA <- missings_per_col[missings_per_col > 0]
@@ -94,28 +99,71 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
 
     if(dim_with_NA[j] < 10) {
       warning('Sample size of missing and nonmissing too small for nonparametric distributional regression, setting to NA')
-      return(data.frame(column_id = j, weight = weight, score = NA, weighted_score = NA)) # return score = NA
+      return(data.frame(column_id = j, weight = weight, score = NA)) # return score = NA
     }
 
-    # Fully observed columns except j
-    Oj <- colSums(is.na(X[!M[, j], ][, -j])) == 0
+    observed_j_for_train <- !M[, j]
 
-    # Only take those that are fully observed
-    # H for all observed values of X_j
-    X_imp_0 <- X_imp[!M[, j], ]
+    # Fully observed columns except j
+    Oj <- colSums(is.na(X[observed_j_for_train, ][, -j])) == 0
+
+
+    if(!any(Oj)) {
+
+      Oj_candidates <- M[, -j]
+
+      max_obs_Ojs <- colSums(!Oj_candidates[observed_j_for_train, ])
+
+      # max_train_size <- sum(observed_j_for_train)
+
+      # Oj_candidates <- M[, -j]
+      #
+      # max_obs_Ojs <- colSums(!Oj_candidates[observed_j_for_train, ])
+      #
+      #
+      # all_combinations <- unlist(lapply(1:ncol(Oj_candidates), function(i) {
+      #   apply(t(combn(colnames(Oj_candidates), i)), 1, paste0, collapse = ".")
+      # }))
+      #
+      # cand <- sapply(1:nrow(Oj_candidates[observed_j_for_train, ]), function(ith_obs) {
+      #   paste0(which(!Oj_candidates[observed_j_for_train, ][ith_obs, ]), collapse = ".")
+      # })
+      #
+      # train_dat <- data.frame(combinations = all_combinations,
+      #                         nrow = unlist(lapply(all_combinations, function(ith) {
+      #                           sum(grepl(ith, cand))})),
+      #                         ncol = floor(nchar(all_combinations)/2) + 1)
+      #
+      # train_dat[["skipped"]] <- max_train_size - train_dat[["nrow"]]
+      #
+      # train_dat[rev(order(train_dat[["nrow"]])),]
+
+
+      observed_j_for_train <- !Oj_candidates[, which.max(max_obs_Ojs)] & !M[, j]
+
+      message(paste0("No complete variables for training column ", j,
+                     ". Skipping some observations."))
+
+    }
+
+
+    Oj <- colSums(is.na(X[observed_j_for_train, ][, -j])) == 0
+
+
+    if(!any(Oj)){
+      warning("Oj was empty. There was no complete column for training.")
+      return(data.frame(column_id = j, weight = weight, score = NA)) # return score = NA
+    }
+
+    # Only take those that are fully observed H for all observed values of X_j
+    X_imp_0 <- X_imp[observed_j_for_train, ]
     X_test <- X_imp_0[, -j][, Oj]
     Y_test <- X_imp_0[, j]
 
-    # Only take those that are fully observed
-    # H for all missing values of X_j
-    X_imp_1 <- X_imp[M[, j], ]
+    # Only take those that are fully observed H for all missing values of X_j
+    X_imp_1 <- X_imp[!observed_j_for_train, ]
     X_train <- X_imp_1[, -j][, Oj]
     Y_train <- X_imp_1[, j]
-
-    if(!any(Oj)){
-      warning("Oj was empty. There was no complete columns for training.")
-      return(data.frame(column_id = j, weight = weight, score = NA, weighted_score = NA)) # return score = NA
-    }
 
     # Train DRF on imputed data
     X_artificial <- rbind(cbind(y = NA, X_test), cbind(y = Y_train, X_train))
@@ -127,20 +175,21 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
       if(inherits(imputed, "try-error"))
         return(NA)
 
-      imputed
+      imputed[1:length(Y_test), 1]
     })
 
     if(length(imputation_list) < N) {
       warning("Unsuccessful imputation! Imputation function is unstable! Returning NA!")
-      return(data.frame(column_id = j, weight = weight, score = NA, weighted_score = NA)) # return score = NA
+      return(data.frame(column_id = j, weight = weight, score = NA)) # return score = NA
     }
 
-    Y_matrix <- do.call(cbind, lapply(imputation_list, function(x)  x[1:length(Y_test), 1]))
-    score_j <- -mean(scoringRules::crps_sample(y = Y_test, dat = Y_matrix))
+    Y_matrix <- do.call(cbind, imputation_list)
+    score_j <- mean(crps_sample(y = Y_test, dat = Y_matrix))
 
     data.frame(column_id = j,
                weight = weight,
                score = score_j)
+
   }) |>
     do.call(rbind, args = _)
 
@@ -153,4 +202,6 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
   attr(weighted_score, "dat") <- scores_dat
   weighted_score
 }
+
+
 

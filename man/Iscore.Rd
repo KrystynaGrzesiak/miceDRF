@@ -34,9 +34,15 @@ for particular columns.
 Calculates score for a single imputation function
 }
 \examples{
+set.seed(111)
 X <- matrix(rnorm(1000), nrow = 100)
-X[c(runif(700), rep(1, 300)) < 0.3] <- NA
+X[runif(1000) < 0.4] <- NA
 imputation_func <- miceDRF:::create_mice_imputation("pmm")
+X_imp <- imputation_func(X)
+
+miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
+
+imputation_func <- miceDRF:::create_mice_imputation("mean")
 X_imp <- imputation_func(X)
 
 miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
