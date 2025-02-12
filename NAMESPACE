@@ -2,7 +2,6 @@
 
 export(Iscore)
 export(Iscore_corr)
-export(Iscore_old)
 export(energy_dist)
 export(impute_mice_drf)
 export(mice.impute.DRF)
