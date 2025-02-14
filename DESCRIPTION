@@ -22,6 +22,7 @@ Imports:
     drf,
     energy,
     mice,
+    pbapply,
     scoringRules
 RoxygenNote: 7.3.2
 Suggests: 

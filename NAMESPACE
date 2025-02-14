@@ -2,6 +2,7 @@
 
 export(Iscore)
 export(Iscore_corr)
+export(Iscore_fast)
 export(energy_dist)
 export(impute_mice_drf)
 export(mice.impute.DRF)
@@ -9,4 +10,5 @@ importFrom(drf,drf)
 importFrom(energy,eqdist.e)
 importFrom(mice,complete)
 importFrom(mice,mice)
+importFrom(pbapply,pblapply)
 importFrom(scoringRules,crps_sample)

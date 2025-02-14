@@ -24,6 +24,7 @@ create_mice_imputation <- function(method) {
 #' @title Calculates score for a single imputation function
 #'
 #' @importFrom scoringRules crps_sample
+#' @importFrom pbapply pblapply
 #'
 #' @param X data containing missing values denoted with NA's
 #' @param X_imp imputed dataset.
@@ -97,10 +98,10 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
   }
 
   cols_to_iterate <- intersect(order(missings_per_col, decreasing = TRUE),
-                               which(dim_with_NA))
+                               which(dim_with_NA))[1:max_length]
 
 
-  scores_dat <- lapply(cols_to_iterate, function(j) {
+  scores_dat <- pbapply::pblapply(cols_to_iterate, function(j) {
 
     weight <- (missings_per_col[j] / n) * ((n - missings_per_col[j]) / n)
 
