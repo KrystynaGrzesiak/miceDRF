@@ -87,20 +87,24 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
   ## Missings pattern
   M <- is.na(X)
 
-  dim_with_NA <- missings_per_col[missings_per_col > 0]
+  dim_with_NA <- missings_per_col > 0
 
-  if (is.null(max_length)) max_length <- length(dim_with_NA)
+  if (is.null(max_length)) max_length <- sum(dim_with_NA)
 
-  if (length(dim_with_NA) < max_length){
+  if (sum(dim_with_NA) < max_length){
     warning("max_length is larger than the total number of columns with missing values!")
     max_length <- sum(dim_with_NA)
   }
 
-  scores_dat <- lapply(order(dim_with_NA, decreasing = TRUE), function(j) {
+  cols_to_iterate <- intersect(order(missings_per_col, decreasing = TRUE),
+                               which(dim_with_NA))
 
-    weight <- (dim_with_NA[j] / n) * ((n - dim_with_NA[j]) / n)
 
-    if(dim_with_NA[j] < 10) {
+  scores_dat <- lapply(cols_to_iterate, function(j) {
+
+    weight <- (missings_per_col[j] / n) * ((n - missings_per_col[j]) / n)
+
+    if(missings_per_col[j] < 10) {
       warning('Sample size of missing and nonmissing too small for nonparametric distributional regression, setting to NA')
       return(data.frame(column_id = j, weight = weight, score = NA)) # return score = NA
     }
