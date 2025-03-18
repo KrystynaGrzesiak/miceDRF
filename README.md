@@ -37,4 +37,8 @@ Ximp <- mice::complete(imp)
 
 ```
 
+## Citation
+
+
+https://doi.org/10.48550/arXiv.2403.19196
 
