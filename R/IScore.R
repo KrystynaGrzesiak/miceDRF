@@ -107,7 +107,8 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
 
     if(missings_per_col[j] < 10) {
       warning('Sample size of missing and nonmissing too small for nonparametric distributional regression, setting to NA')
-      return(data.frame(column_id = j, weight = weight, score = NA)) # return score = NA
+      return(data.frame(column_id = j, weight = weight, score = NA,
+                        n_columns_used = NA)) # return score = NA
     }
 
     observed_j_for_train <- !M[, j]
