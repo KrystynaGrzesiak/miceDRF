@@ -134,6 +134,8 @@ do_one_hot <- function(vec) {
 #' imputation_func <- miceDRF:::create_mice_imputation("cart")
 #' X_imp <- imputation_func(X)
 #'
+#' Iscore_cat(X, X_imp, imputation_func, onehot = TRUE)
+#'
 #' @export
 #'
 
@@ -268,10 +270,11 @@ Iscore_cat <- function(X, X_imp, imputation_func, onehot = FALSE, mask = NULL,
 
     if(j %in% factor_columns) {
       Y_test <- factor_to_onehot(Y_test)
-      Y_matrix <- do.call(rbind, imputation_list)
+      Y_matrix <- do.call(cbind, imputation_list)
 
-      score_j <- mean(apply(Y_test, 1, function(ith_obs) {
-        scoringRules::es_sample(ith_obs,  t(Y_matrix))
+      score_j <- mean(sapply(1:nrow(Y_test), function(ith_obs) {
+        scoringRules::es_sample(as.numeric(unlist(Y_test[ith_obs, ])),
+                                t(matrix(as.numeric(Y_matrix[ith_obs, ]), ncol = ncol(Y_test), byrow = TRUE)))
       }))
 
     } else {
