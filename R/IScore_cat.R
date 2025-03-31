@@ -169,8 +169,6 @@ Iscore_cat <- function(X, X_imp, imputation_func, onehot = FALSE, mask = NULL,
 
   scores_dat <- pbapply::pblapply(cols_to_iterate, function(j) {
 
-    print(j)
-
     weight <- (missings_per_col[j] / n) * ((n - missings_per_col[j]) / n)
 
     if(missings_per_col[j] < 10) {
