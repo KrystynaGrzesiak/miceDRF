@@ -41,22 +41,7 @@ create_mice_imputations <- function(methods) {
 #' methods <- c("pmm", "cart", "sample", "norm.nob", "DRF")
 #' imputation_list <- create_mice_imputations(methods)
 #'
-#' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
-#'
-#' imputation_func <- miceDRF:::create_mice_imputation("mean")
-#' X_imp <- imputation_func(X)
-#'
-#' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
-#'
-#' miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
-#'
-#' # zero imputation
-#' X <- matrix(rnorm(1000), nrow = 100)
-#' X[c(runif(1000) < 0.3)] <- NA
-#' imputation_func <- function(X) {X[is.na(X)] <- 0; X}
-#' X_imp <- imputation_func(X)
-#'
-#' Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
+#' Iscores_compare(X, imputation_list)
 #'
 #' @export
 #'
