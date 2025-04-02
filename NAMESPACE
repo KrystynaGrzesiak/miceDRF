@@ -2,6 +2,8 @@
 
 export(Iscore)
 export(Iscore_cat)
+export(Iscores_compare)
+export(create_mice_imputations)
 export(energy_dist)
 export(impute_mice_drf)
 export(mice.impute.DRF)
