@@ -153,7 +153,7 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
 
       imputed <- try({imputation_func(X_artificial)})
 
-      if(inherits(imputed, "try-error"))
+      if(inherits(imputed, "try-error") | any(is.na(imputed)))
         return(NA)
 
       imputed[1:length(Y_test), 1]

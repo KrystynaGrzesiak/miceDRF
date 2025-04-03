@@ -2,7 +2,7 @@
 % Please edit documentation in R/IScore.R
 \name{Iscore}
 \alias{Iscore}
-\title{Calculates score for a single imputation function}
+\title{Calculates score for one imputation function}
 \usage{
 Iscore(
   X,
@@ -43,7 +43,7 @@ provided imputation function and a table with scores and weights calculated
 for particular columns.
 }
 \description{
-Calculates score for a single imputation function
+Calculates score for one imputation function
 }
 \examples{
 set.seed(111)

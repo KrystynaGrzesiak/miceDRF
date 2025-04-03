@@ -281,7 +281,6 @@ Iscore_cat <- function(X, X_imp, imputation_func, factor_vars = TRUE,
 
     })
 
-
     if(length(imputation_list) < N) {
       warning("Unsuccessful imputation! Imputation function is unstable!
               Returning NA!")
