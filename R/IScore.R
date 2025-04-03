@@ -21,7 +21,7 @@ create_mice_imputation <- function(method) {
 
 
 
-#' @title Calculates score for a single imputation function
+#' @title Calculates score for one imputation function
 #'
 #' @importFrom scoringRules crps_sample
 #' @importFrom pbapply pblapply

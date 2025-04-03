@@ -49,7 +49,7 @@ create_mice_imputations <- function(methods) {
 Iscores_compare <- function(X, imputation_list, methods = NULL, N = 50,
                             max_length = NULL, skip_if_needed = TRUE) {
   if(is.null(methods)) {
-    methods <- names(methods)
+    methods <- names(imputation_list)
   } else {
     if(length(methods) != length(imputation_list))
       stop("Provided methods doesn't match imputation_list!")
