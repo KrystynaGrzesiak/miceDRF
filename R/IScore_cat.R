@@ -1,3 +1,19 @@
+
+#' @title Internal function for changing factors to numerical
+#'
+#' A supplementarty function for data management
+#'
+#' @param factor_col a factor column
+#'
+
+
+factor_to_numeric <- function(factor_col) {
+  as.numeric(levels(factor_col))[factor_col]
+}
+
+
+
+
 #' @title One hot encoding
 #'
 #' A supplementarty function for one-hot encoding
@@ -134,14 +150,15 @@ do_one_hot <- function(vec) {
 #' imputation_func <- miceDRF:::create_mice_imputation("cart")
 #' X_imp <- imputation_func(X)
 #'
-#' Iscore_cat(X, X_imp, imputation_func, onehot = TRUE)
+#' Iscore_cat(X, X_imp, imputation_func, factor_vars = FALSE)
 #'
 #' @export
 #'
 
-Iscore_cat <- function(X, X_imp, imputation_func, onehot = FALSE, mask = NULL,
+Iscore_cat <- function(X, X_imp, imputation_func, factor_vars = TRUE,
                        multiple = TRUE, N = 50, max_length = NULL,
                        skip_if_needed = TRUE){
+
 
   N <- ifelse(multiple, N, 1)
 
@@ -221,37 +238,41 @@ Iscore_cat <- function(X, X_imp, imputation_func, onehot = FALSE, mask = NULL,
       X_artificial <- rbind(data.frame(y = as.factor(NA),
                                        X = X_test),
                             data.frame(y = Y_train, X = X_train))
+      Y_test <- factor_to_onehot(Y_test)
     } else {
       X_artificial <- rbind(data.frame(y = NA,
                                        X = X_test),
                             data.frame(y = Y_train, X = X_train))
     }
 
-    if(onehot) {
-      y_encoded <- factor_to_onehot(X_artificial[, 1])
-      x_encoded <- factor_to_onehot(X_artificial[, -1])
-      mask <- c(attr(y_encoded, "mask") + 1, attr(x_encoded, "mask"))
-      X_artificial <- data.frame(y_encoded, x_encoded)
+    if(!factor_vars) {
+      factor_cols_X_art <- which(sapply(X_artificial, is.factor))
+      X_artificial[, factor_cols_X_art] <-
+        sapply(X_artificial[, factor_cols_X_art], factor_to_numeric)
     }
+
+    # if(onehot) {
+    #   y_encoded <- factor_to_onehot(X_artificial[, 1])
+    #   x_encoded <- factor_to_onehot(X_artificial[, -1])
+    #   mask <- c(attr(y_encoded, "mask") + 1, attr(x_encoded, "mask"))
+    #   X_artificial <- data.frame(y_encoded, x_encoded)
+    # }
 
     imputation_list <- lapply(1:N, function(ith_imputation) {
 
       imputed <- try({imputation_func(X_artificial)})
 
-      if(inherits(imputed, "try-error"))
+      if(inherits(imputed, "try-error") | any(is.na(imputed)))
         return(NA)
-
-      if(any(is.na(imputed)))
-        return(NA)
-
-      if(!onehot) {
-        imputed <- factor_to_onehot(imputed)
-        mask <- attr(imputed, "mask")
-      }
 
       if(j %in% factor_columns) {
-        Y_test <- factor_to_onehot(Y_test)
-        res <- imputed[1:nrow(Y_test), mask == mask[1]]
+        res <- imputed[1:nrow(Y_test), 1]
+
+        if(!factor_vars) {
+          res <- as.factor(res)
+        }
+        res <- factor_to_onehot(res)
+
       } else {
         res <- imputed[1:length(Y_test), 1]
       }
@@ -260,8 +281,10 @@ Iscore_cat <- function(X, X_imp, imputation_func, onehot = FALSE, mask = NULL,
 
     })
 
+
     if(length(imputation_list) < N) {
-      warning("Unsuccessful imputation! Imputation function is unstable! Returning NA!")
+      warning("Unsuccessful imputation! Imputation function is unstable!
+              Returning NA!")
       return(data.frame(column_id = j, weight = weight, score = NA,
                         n_columns_used = sum(Oj))) # return score = NA
     }
@@ -272,7 +295,8 @@ Iscore_cat <- function(X, X_imp, imputation_func, onehot = FALSE, mask = NULL,
 
       score_j <- mean(sapply(1:nrow(Y_test), function(ith_obs) {
         scoringRules::es_sample(as.numeric(unlist(Y_test[ith_obs, ])),
-                                t(matrix(as.numeric(Y_matrix[ith_obs, ]), ncol = ncol(Y_test), byrow = TRUE)))
+                                t(matrix(as.numeric(Y_matrix[ith_obs, ]),
+                                         ncol = ncol(Y_test), byrow = TRUE)))
       }))
 
     } else {

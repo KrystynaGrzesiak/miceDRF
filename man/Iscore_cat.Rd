@@ -8,8 +8,7 @@ Iscore_cat(
   X,
   X_imp,
   imputation_func,
-  onehot = FALSE,
-  mask = NULL,
+  factor_vars = TRUE,
   multiple = TRUE,
   N = 50,
   max_length = NULL,
@@ -22,16 +21,6 @@ Iscore_cat(
 \item{X_imp}{imputed dataset.}
 
 \item{imputation_func}{a function that imputes data}
-
-\item{onehot}{a logical meaning the setup of categorical variables
-imputation. I=f \code{TRUE} it means one-hot encoding for imputation.
-Otherwise factors are used}
-
-\item{mask}{an integer vector ocntaining repeated id's of factor variables.
-Used only when \code{X_imp} and \code{X} are provided in one-hot encoding. It
-should have the same length as the number of columns in proivided data frames.
-It should contain 0's when the column does not describe vategory (for instance
-numerical columns) and id's for categorical columns. (See details).}
 
 \item{multiple}{a logical indicating whether provided imputation method is a
 multiple imputation approach (i.e. it generates different values to impute
@@ -48,6 +37,16 @@ be taken under consideration.}
 \item{skip_if_needed}{logical, indicating whether some observations should be
 skipped to obtain complete columns for scoring. If FALSE, NA will be returned
 for column with no observed variable for training.}
+
+\item{onehot}{a logical meaning the setup of categorical variables
+imputation. I=f \code{TRUE} it means one-hot encoding for imputation.
+Otherwise factors are used}
+
+\item{mask}{an integer vector ocntaining repeated id's of factor variables.
+Used only when \code{X_imp} and \code{X} are provided in one-hot encoding. It
+should have the same length as the number of columns in proivided data frames.
+It should contain 0's when the column does not describe vategory (for instance
+numerical columns) and id's for categorical columns. (See details).}
 }
 \value{
 a numerical value denoting weighted Imputation Score obtained for
@@ -76,6 +75,6 @@ X[["V8"]] <- rnorm(100)
 imputation_func <- miceDRF:::create_mice_imputation("cart")
 X_imp <- imputation_func(X)
 
-Iscore_cat(X, X_imp, imputation_func, TRUE)
+Iscore_cat(X, X_imp, imputation_func, factor_vars = FALSE)
 
 }
