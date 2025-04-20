@@ -147,7 +147,7 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
     Y_train <- X_imp_1[, j]
 
     # Train DRF on imputed data
-    X_artificial <- rbind(cbind(y = NA, X_test), cbind(y = Y_train, X_train))
+    X_artificial <- as.data.frame(rbind(cbind(y = NA, X_test), cbind(y = Y_train, X_train)))
 
     imputation_list <- lapply(1:N, function(ith_imputation) {
 
