@@ -36,7 +36,7 @@
 #' @export
 #'
 
-Iscore_beta2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
+Iscore_beta <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
                          max_length = NULL, skip_if_needed = TRUE){
   
   N <- ifelse(multiple, N, 1)
