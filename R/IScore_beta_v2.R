@@ -26,11 +26,11 @@
 #'
 #' @examples
 #' set.seed(111)
-#' X <- matrix(rnorm(1000), nrow = 100)
-#' X[runif(1000) < 0.4] <- NA
+#' X <- matrix(rnorm(8000), nrow = 100)
+#' X[runif(8000) < 0.4] <- NA
 #' X_imp <- impute_mice_drf(X)
 #'
-#' miceDRF::Iscore_beta_v2(X, X_imp, N = 50, imputation_func = impute_mice_drf)
+#' miceDRF::Iscore_beta_v2(X, X_imp, N = 10, imputation_func = impute_mice_drf)
 #'
 #' @export
 #'
@@ -116,17 +116,15 @@ Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
 
 
     score_j <- mean((apply( unique(M_test),1, function(m){
-      print(m)
 
       ##Important: For the final version we want an expectation, that is, either random sampling
-      ## or weighting according to the number of times pattern m appears in M_test. 
-      
+      ## or weighting according to the number of times pattern m appears in M_test.
+
       # Train DRF on imputed data
       X_artificial <- rbind(cbind(y = NA, X_test[,!m]), cbind(y = Y_train, X_train[,!m]))
 
       imputation_list <- lapply(1:N, function(ith_imputation) {
 
-        print(ith_imputation)
         imputed <- try({imputation_func(X_artificial)})
 
         if(inherits(imputed, "try-error") | any(is.na(imputed)))
