@@ -112,12 +112,15 @@ Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
     X_train<-X_0train[, -j]
     Y_train<-X_0train[,j]
 
-    M_test<-M[-trainsample0,-j]
+    M_test<-M[testsample,-j]
 
 
     score_j <- mean((apply( unique(M_test),1, function(m){
       print(m)
 
+      ##Important: For the final version we want an expectation, that is, either random sampling
+      ## or weighting according to the number of times pattern m appears in M_test. 
+      
       # Train DRF on imputed data
       X_artificial <- rbind(cbind(y = NA, X_test[,!m]), cbind(y = Y_train, X_train[,!m]))
 
