@@ -49,9 +49,8 @@ Calculates score for one imputation function
 set.seed(111)
 X <- matrix(rnorm(1000), nrow = 100)
 X[runif(1000) < 0.4] <- NA
-imputation_func <- miceDRF:::create_mice_imputation("pmm")
-X_imp <- imputation_func(X)
+X_imp <- impute_mice_drf(X)
 
-miceDRF::Iscore_beta(X, X_imp, N = 50, imputation_func = imputation_func)
+miceDRF::Iscore_beta_v2(X, X_imp, N = 50, imputation_func = impute_mice_drf)
 
 }
