@@ -76,17 +76,21 @@ Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
                         n_columns_used = NA)) # return score = NA
     }
 
-    observed_j_for_train <- !M[, j]
+    observed_j_for_train <- which(!M[, j])
 
-    X_0 <- X[observed_j_for_train, ]
+    X_0 <- X[observed_j_for_train, ] #X[M_j==1,]
     # Only take those that are fully observed H for all missing values of X_j
-    #X_1 <- X[!observed_j_for_train, ]
 
 
-    ## Divide into training and test set
-    trainsample0<-sample(1:nrow(X_0), size=round(3*nrow(X_0)/4))
-    X_0train<-X_imp[trainsample0,] ## X_imp now!
-    X_0test<-X_0[-trainsample0,]
+    ## Randomly choose the test set \mathcal{T} from X_0 (M_j=1)
+    testsample0<-sample(1:nrow(X_0), size=round(1*nrow(X_0)/4))
+    testsample<-observed_j_for_train[testsample0]
+
+    ### Important: X_0[testsample0,]==X[testsample,] ######
+
+    ## Take the imputation for the training set \mathcal{T}^c
+    X_0train<-X_imp[-testsample,] ## X_imp now!
+    X_0test<-X_0[testsample0,]
 
     #trainsample1<-sample(1:nrow(X_1), size=round(3*nrow(X_1)/4))
     #X_1train<-X_1[trainsample1,]
