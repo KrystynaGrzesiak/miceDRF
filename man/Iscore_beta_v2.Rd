@@ -47,10 +47,10 @@ Calculates score for one imputation function
 }
 \examples{
 set.seed(111)
-X <- matrix(rnorm(1000), nrow = 100)
-X[runif(1000) < 0.4] <- NA
+X <- matrix(rnorm(8000), nrow = 100)
+X[runif(8000) < 0.4] <- NA
 X_imp <- impute_mice_drf(X)
 
-miceDRF::Iscore_beta_v2(X, X_imp, N = 50, imputation_func = impute_mice_drf)
+miceDRF::Iscore_beta_v2(X, X_imp, N = 10, imputation_func = impute_mice_drf)
 
 }
