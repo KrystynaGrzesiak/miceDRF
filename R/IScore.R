@@ -169,8 +169,8 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
     Y_matrix <- do.call(cbind, imputation_list)
 
     if(scale) {
-      Y_test <- Y_test / var(Y_test)
-      Y_matrix <- Y_matrix / var(Y_test)
+      Y_test <- (Y_test - mean(Y_test)) / sd(Y_test)
+      Y_matrix <- (Y_matrix - mean(Y_test)) / sd(Y_test)
     }
 
     score_j <- mean(crps_sample(y = Y_test, dat = Y_matrix))
