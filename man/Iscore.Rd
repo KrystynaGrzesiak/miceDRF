@@ -11,7 +11,8 @@ Iscore(
   N = 50,
   imputation_func,
   max_length = NULL,
-  skip_if_needed = TRUE
+  skip_if_needed = TRUE,
+  scale = FALSE
 )
 }
 \arguments{
@@ -36,6 +37,8 @@ be taken under consideration.}
 \item{skip_if_needed}{logical, indicating whether some observations should be
 skipped to obtain complete columns for scoring. If FALSE, NA will be returned
 for column with no observed variable for training.}
+
+\item{scale}{logica. If TRUE, each variable is scaled in the score.}
 }
 \value{
 a numerical value denoting weighted Imputation Score obtained for

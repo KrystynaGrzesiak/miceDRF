@@ -41,6 +41,7 @@ create_mice_imputation <- function(method) {
 #' @param skip_if_needed logical, indicating whether some observations should be
 #' skipped to obtain complete columns for scoring. If FALSE, NA will be returned
 #' for column with no observed variable for training.
+#' @param scale logica. If TRUE, each variable is scaled in the score.
 #'
 #' @return a numerical value denoting weighted Imputation Score obtained for
 #' provided imputation function and a table with scores and weights calculated
@@ -74,7 +75,7 @@ create_mice_imputation <- function(method) {
 #'
 
 Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
-                   max_length = NULL, skip_if_needed = TRUE){
+                   max_length = NULL, skip_if_needed = TRUE, scale = FALSE){
 
   N <- ifelse(multiple, N, 1)
 
@@ -166,6 +167,12 @@ Iscore <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
     }
 
     Y_matrix <- do.call(cbind, imputation_list)
+
+    if(scale) {
+      Y_test <- Y_test / var(Y_test)
+      Y_matrix <- Y_matrix / var(Y_test)
+    }
+
     score_j <- mean(crps_sample(y = Y_test, dat = Y_matrix))
 
     data.frame(column_id = j,
