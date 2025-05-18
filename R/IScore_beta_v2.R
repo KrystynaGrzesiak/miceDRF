@@ -37,7 +37,7 @@
 
 
 Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
-                        max_length = NULL, skip_if_needed = TRUE){
+                        max_length = NULL, skip_if_needed = TRUE, scale=F){
 
   N <- ifelse(multiple, N, 1)
 
@@ -140,6 +140,12 @@ Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
       }
 
       Y_matrix <- do.call(cbind, imputation_list)
+      
+      if(scale) {
+        Y_test <- (Y_test - mean(Y_test)) / sd(Y_test)
+        Y_matrix <- (Y_matrix - mean(Y_test)) / sd(Y_test)
+      }
+      
       mean(scoringRules::crps_sample(y = Y_test, dat = Y_matrix))
 
 
