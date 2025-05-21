@@ -11,7 +11,8 @@ Iscore_beta_v2(
   N = 50,
   imputation_func,
   max_length = NULL,
-  skip_if_needed = TRUE
+  skip_if_needed = TRUE,
+  n_patterns = 10
 )
 }
 \arguments{
@@ -36,6 +37,10 @@ be taken under consideration.}
 \item{skip_if_needed}{logical, indicating whether some observations should be
 skipped to obtain complete columns for scoring. If FALSE, NA will be returned
 for column with no observed variable for training.}
+
+\item{n_patterns}{numerical indicating how many patterns should be sampled
+to calculate the score for j'th column. \code{n_patterns} can be NULL meaning
+that all the patterns will be used (it might be slow). Default to 10.}
 }
 \value{
 a numerical value denoting weighted Imputation Score obtained for
@@ -47,7 +52,7 @@ Calculates score for one imputation function
 }
 \examples{
 set.seed(111)
-X <- matrix(rnorm(8000), nrow = 100)
+X <- matrix(rnorm(8000), nrow = 1000)
 X[runif(8000) < 0.4] <- NA
 X_imp <- impute_mice_drf(X)
 

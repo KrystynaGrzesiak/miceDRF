@@ -19,6 +19,9 @@
 #' @param skip_if_needed logical, indicating whether some observations should be
 #' skipped to obtain complete columns for scoring. If FALSE, NA will be returned
 #' for column with no observed variable for training.
+#' @param n_patterns numerical indicating how many patterns should be sampled
+#' to calculate the score for j'th column. \code{n_patterns} can be NULL meaning
+#' that all the patterns will be used (it might be slow). Default to 10.
 #'
 #' @return a numerical value denoting weighted Imputation Score obtained for
 #' provided imputation function and a table with scores and weights calculated
@@ -26,7 +29,7 @@
 #'
 #' @examples
 #' set.seed(111)
-#' X <- matrix(rnorm(8000), nrow = 100)
+#' X <- matrix(rnorm(8000), nrow = 1000)
 #' X[runif(8000) < 0.4] <- NA
 #' X_imp <- impute_mice_drf(X)
 #'
@@ -37,7 +40,7 @@
 
 
 Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
-                        max_length = NULL, skip_if_needed = TRUE){
+                        max_length = NULL, skip_if_needed = TRUE, n_patterns = 10){
 
   N <- ifelse(multiple, N, 1)
 
@@ -109,19 +112,23 @@ Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
     #X_train <- X_1[, -j]
     #Y_train <- X_imp[!observed_j_for_train, ][, j]
 
-    X_train<-X_0train[, -j]
-    Y_train<-X_0train[,j]
+    X_train <- X_0train[, -j]
+    Y_train <- X_0train[, j]
 
-    M_test<-M[testsample,-j]
+    M_test <- unique(M[testsample, -j])
 
+    if(!is.null(n_patterns)) {
+      n_patterns <- min(nrow(M_test), n_patterns)
+      M_test <- M_test[sample(1:nrow(M_test), replace = FALSE, size = n_patterns), ]
+    }
 
-    score_j <- mean((apply( unique(M_test),1, function(m){
+    score_j <- mean((apply(M_test, 1, function(m){
 
       ##Important: For the final version we want an expectation, that is, either random sampling
       ## or weighting according to the number of times pattern m appears in M_test.
 
       # Train DRF on imputed data
-      X_artificial <- rbind(cbind(y = NA, X_test[,!m]), cbind(y = Y_train, X_train[,!m]))
+      X_artificial <- rbind(cbind(y = NA, X_test[, !m]), cbind(y = Y_train, X_train[, !m]))
 
       imputation_list <- lapply(1:N, function(ith_imputation) {
 
