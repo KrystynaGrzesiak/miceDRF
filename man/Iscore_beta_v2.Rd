@@ -12,32 +12,11 @@ Iscore_beta_v2(
   imputation_func,
   max_length = NULL,
   skip_if_needed = TRUE,
-  n_patterns = 10
+  n_patterns = 10,
+  scale = FALSE
 )
 }
 \arguments{
-\item{X}{data containing missing values denoted with NA's}
-
-\item{X_imp}{imputed dataset.}
-
-\item{multiple}{a logical indicating whether provided imputation method is a
-multiple imputation approach (i.e. it generates different values to impute
-for each call). Default to TRUE. Note that if multiple equals to FALSE, N is
-automatically set to 1.}
-
-\item{N}{a numeric value. Number of samples from imputation distribution H.
-Default to 50.}
-
-\item{imputation_func}{a function that imputes data}
-
-\item{max_length}{Maximum number of variables \eqn{X_j} to consider, can
-speed up the code. Default to \code{NULL} meaning that all the columns will
-be taken under consideration.}
-
-\item{skip_if_needed}{logical, indicating whether some observations should be
-skipped to obtain complete columns for scoring. If FALSE, NA will be returned
-for column with no observed variable for training.}
-
 \item{n_patterns}{numerical indicating how many patterns should be sampled
 to calculate the score for j'th column. \code{n_patterns} can be NULL meaning
 that all the patterns will be used (it might be slow). Default to 10.}

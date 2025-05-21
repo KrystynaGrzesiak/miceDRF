@@ -4,21 +4,8 @@
 #' @importFrom scoringRules crps_sample
 #' @importFrom pbapply pblapply
 #'
-#' @param X data containing missing values denoted with NA's
-#' @param X_imp imputed dataset.
-#' @param imputation_func a function that imputes data
-#' @param N a numeric value. Number of samples from imputation distribution H.
-#' Default to 50.
-#' @param max_length Maximum number of variables \eqn{X_j} to consider, can
-#' speed up the code. Default to \code{NULL} meaning that all the columns will
-#' be taken under consideration.
-#' @param multiple a logical indicating whether provided imputation method is a
-#' multiple imputation approach (i.e. it generates different values to impute
-#' for each call). Default to TRUE. Note that if multiple equals to FALSE, N is
-#' automatically set to 1.
-#' @param skip_if_needed logical, indicating whether some observations should be
-#' skipped to obtain complete columns for scoring. If FALSE, NA will be returned
-#' for column with no observed variable for training.
+#' @inheritParams IScore
+#'
 #' @param n_patterns numerical indicating how many patterns should be sampled
 #' to calculate the score for j'th column. \code{n_patterns} can be NULL meaning
 #' that all the patterns will be used (it might be slow). Default to 10.
@@ -40,7 +27,8 @@
 
 
 Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
-                        max_length = NULL, skip_if_needed = TRUE, n_patterns = 10){
+                        max_length = NULL, skip_if_needed = TRUE, n_patterns = 10,
+                        scale = FALSE){
 
   N <- ifelse(multiple, N, 1)
 
@@ -147,13 +135,17 @@ Iscore_beta_v2 <- function(X, X_imp, multiple = TRUE, N = 50, imputation_func,
       }
 
       Y_matrix <- do.call(cbind, imputation_list)
+
+      if(scale) {
+        Y_test <- (Y_test - mean(Y_test)) / sd(Y_test)
+        Y_matrix <- (Y_matrix - mean(Y_test)) / sd(Y_test)
+      }
+
       mean(scoringRules::crps_sample(y = Y_test, dat = Y_matrix))
 
 
 
       } )))
-
-
 
     data.frame(column_id = j,
                weight = weight,
