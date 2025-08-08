@@ -281,7 +281,7 @@ Iscore_cat <- function(X, X_imp, imputation_func, factor_vars = TRUE,
 
     })
 
-    if(length(imputation_list) < N) {
+    if(length(imputation_list[!sapply(imputation_list, function(x) all(is.na(x)))]) < N) {
       warning("Unsuccessful imputation! Imputation function is unstable!
               Returning NA!")
       return(data.frame(column_id = j, weight = weight, score = NA,
