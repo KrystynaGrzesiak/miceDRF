@@ -240,13 +240,13 @@ Iscore_cat <- function(X, X_imp, imputation_func, factor_vars = TRUE,
                               data.frame(y = Y_train, X = X_train))
       } else {
         X_artificial <- rbind(data.frame(y = NA_real_, X = X_test),
-                              data.frame(y = Y_train, X = X_train))
+                              data.frame(y = as.numeric(Y_train), X = X_train))
       }
       Y_test <- factor_to_onehot(Y_test)
     } else {
-      X_artificial <- rbind(data.frame(y = NA,
+      X_artificial <- rbind(data.frame(y = NA_real_,
                                        X = X_test),
-                            data.frame(y = Y_train, X = X_train))
+                            data.frame(y = as.numeric(Y_train), X = X_train))
     }
 
     if(!factor_vars) {
