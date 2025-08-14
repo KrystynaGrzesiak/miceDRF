@@ -22,6 +22,10 @@ Iscore_cat(
 
 \item{imputation_func}{a function that imputes data}
 
+\item{factor_vars}{a logical value indicating whether imputation should be
+performed on factors. If \code{FALSE}, all the variables that are factors
+will be converted to numeric values.}
+
 \item{multiple}{a logical indicating whether provided imputation method is a
 multiple imputation approach (i.e. it generates different values to impute
 for each call). Default to TRUE. Note that if multiple equals to FALSE, N is
@@ -37,16 +41,6 @@ be taken under consideration.}
 \item{skip_if_needed}{logical, indicating whether some observations should be
 skipped to obtain complete columns for scoring. If FALSE, NA will be returned
 for column with no observed variable for training.}
-
-\item{onehot}{a logical meaning the setup of categorical variables
-imputation. I=f \code{TRUE} it means one-hot encoding for imputation.
-Otherwise factors are used}
-
-\item{mask}{an integer vector ocntaining repeated id's of factor variables.
-Used only when \code{X_imp} and \code{X} are provided in one-hot encoding. It
-should have the same length as the number of columns in proivided data frames.
-It should contain 0's when the column does not describe vategory (for instance
-numerical columns) and id's for categorical columns. (See details).}
 }
 \value{
 a numerical value denoting weighted Imputation Score obtained for
@@ -57,10 +51,11 @@ for particular columns.
 Calculates score for a single imputation function
 }
 \details{
-If you are using the data already stored in one-hot variables you should provide
-a \code{mask} variable. For example a mask variable for 6D data can look like
-\code{c(1, 1, 0, 0, 0, 0)} which means that first two columns of provided data
-store one one-hot encoded categorical variable.
+The categorical variables should be stored as factors. If you need additional
+conversion of the data (for example one-hot encoding) for imputation, please,
+implement everything within \code{imputation_func} parameter. You can use
+\code{miceDRF:::onehot_to_factor} and \code{miceDRF:::factor_to_onehot}
+functions.
 }
 \examples{
 set.seed(123)

@@ -6,13 +6,9 @@
 #' @param factor_col a factor column
 #'
 
-
 factor_to_numeric <- function(factor_col) {
   as.numeric(levels(factor_col))[factor_col]
 }
-
-
-
 
 #' @title One hot encoding
 #'
@@ -20,8 +16,6 @@ factor_to_numeric <- function(factor_col) {
 #'
 #' @param dat a data containinig some factor but numeric columns.
 #'
-
-
 factor_to_onehot <- function(dat) {
 
   dat <- data.frame(dat)
@@ -50,7 +44,6 @@ factor_to_onehot <- function(dat) {
 #'
 #' @param onehot_dat a data coded with \code{factor_to_onehot} function.
 #'
-
 onehot_to_factor <- function(onehot_dat) {
 
   mask <- attr(onehot_dat, "mask")
@@ -101,9 +94,14 @@ onehot_to_factor <- function(onehot_dat) {
 do_one_hot <- function(vec) {
 
   NA_mat <- matrix(NA, nrow = length(vec), ncol = length(levels(vec)))
-  mm <- cbind(model.matrix(~vec), 0)
-  mm[, 1] <-  mm[, 1] - rowSums(mm[, -1])
-  NA_mat[as.numeric(rownames(mm)), ] <- mm[, - ncol(mm)]
+
+  if(ncol(NA_mat) == 1) {
+    NA_mat[, 1] <- vec
+  } else {
+    mm <- cbind(model.matrix(~vec), 0)
+    mm[, 1] <-  mm[, 1] - rowSums(data.frame(mm[, -1]))
+    NA_mat[as.numeric(rownames(mm)), ] <- mm[, - ncol(mm)]
+  }
   colnames(NA_mat) <- paste0("level_", sort(levels(vec)))
 
   NA_mat
@@ -118,23 +116,20 @@ do_one_hot <- function(vec) {
 #' @importFrom pbapply pblapply
 #' @inheritParams Iscore
 #'
-#' @param onehot a logical meaning the setup of categorical variables
-#' imputation. I=f \code{TRUE} it means one-hot encoding for imputation.
-#' Otherwise factors are used
-#' @param mask an integer vector ocntaining repeated id's of factor variables.
-#' Used only when \code{X_imp} and \code{X} are provided in one-hot encoding. It
-#' should have the same length as the number of columns in proivided data frames.
-#' It should contain 0's when the column does not describe vategory (for instance
-#' numerical columns) and id's for categorical columns. (See details).
+#' @param factor_vars a logical value indicating whether imputation should be
+#' performed on factors. If \code{FALSE}, all the variables that are factors
+#' will be converted to numeric values.
+#'
 #' @return a numerical value denoting weighted Imputation Score obtained for
 #' provided imputation function and a table with scores and weights calculated
 #' for particular columns.
 #'
 #' @details
-#' If you are using the data already stored in one-hot variables you should provide
-#' a \code{mask} variable. For example a mask variable for 6D data can look like
-#' \code{c(1, 1, 0, 0, 0, 0)} which means that first two columns of provided data
-#' store one one-hot encoded categorical variable.
+#' The categorical variables should be stored as factors. If you need additional
+#' conversion of the data (for example one-hot encoding) for imputation, please,
+#' implement everything within \code{imputation_func} parameter. You can use
+#' \code{miceDRF:::onehot_to_factor} and \code{miceDRF:::factor_to_onehot}
+#' functions.
 #'
 #'
 #' @examples
@@ -158,7 +153,6 @@ do_one_hot <- function(vec) {
 Iscore_cat <- function(X, X_imp, imputation_func, factor_vars = TRUE,
                        multiple = TRUE, N = 50, max_length = NULL,
                        skip_if_needed = TRUE){
-
 
   N <- ifelse(multiple, N, 1)
 
