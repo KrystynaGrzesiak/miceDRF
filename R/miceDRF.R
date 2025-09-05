@@ -41,7 +41,7 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
   if(any(factor_vars)){
     warning("Changing factor to numeric.")
     missdf[] <- lapply(missdf, function(col) {
-      if (is.factor(col)) as.numeric(col) else col
+      if (is.factor(col)) as.numeric(levels(col))[col] else col
     })
   }
 
