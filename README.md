@@ -1,5 +1,7 @@
 # miceDRF: imputation with mice DRF and I-Score
 
+miceDRF is an R package that extends the functionality of the [mice](https://github.com/amices/mice) package by providing a new method for handling missing data using Distributed Random Forests (DRF).
+
 
 ## Installation
 
