@@ -16,7 +16,7 @@ Description: This package contains miceDRF imputation method and tools for
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/KrystynaGrzesiak/miceDRF
+URL: https://github.com/KrystynaGrzesiak/miceDRF, https://krystynagrzesiak.github.io/miceDRF/
 BugReports: https://github.com/KrystynaGrzesiak/miceDRF/issues
 Imports:
     drf,
