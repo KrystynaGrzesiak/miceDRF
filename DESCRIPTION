@@ -27,6 +27,7 @@ Imports:
 RoxygenNote: 7.3.3
 Suggests: 
     knitr,
+    ranger,
     rmarkdown,
     spelling,
     testthat (>= 3.0.0)

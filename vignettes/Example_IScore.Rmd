@@ -80,6 +80,7 @@ impute_zero <- function(X) { X[is.na(X)] <- 0; X }
 Additionally, the `miceDRF` package provides a convenient way to quickly implement imputation methods from the `mice` package that are fully compatible with the energy-I-Score. You can simply use `create_mice_imputation()` with the name of the method (for the list of methods see `?mice::mice`) as below *random forest imputation*:
 
 ```{r}
+library(ranger)                                  # for random forest imputation
 impute_rf <- create_mice_imputation("rf")
 ```
 
