@@ -1,0 +1,144 @@
+---
+title: "Energy-I-Score: Implementation Details"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{About_IScore}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction
+
+This vignette presents the implementation details of the *energy-I-Score*, a metric designed to **evaluate the quality of imputation methods** in incomplete datasets.  
+
+The score is based on the concept of **energy distance** between observed and imputed distributions. It allows comparing the uncertainty induced by the imputation model with the variability present in the observed data. The procedure is model-agnostic: it can be used with any imputation method $\mathcal{I}$ and with multiple imputation draws.
+
+The score is **distribution-free** and can be applied to:
+
+- continuous variables,
+- mixed-type data (here the score is calculated on dummy variables),
+- multiple imputation methods.
+
+---
+
+## Notation
+
+Let $X \in \mathbb{R}^{n \times p}$ be an original dataset with missing values, $\tilde{X} \in \mathbb{R}^{n \times p}$ be an imputed dataset, $\mathcal{I}$ imputation function, and $N$ the number of imputations drawn from $\mathcal{I}$.
+
+Then, for each variable with missing values $j \in \{1, \ldots, p\}$ we define $L_j$ as a set of indices $i$ for which $X_{i,j}$ is observed, $L_j^c$ being a set of indices $i$ for which $X_{i,j}$ is missing and $O_j$ a set of fully observed predictor variables for rows with $X_{i,j}$ observed.
+
+Finally, we define the set of variables with missing values as $\mathcal{S} = \{ j : L_j^c \neq \emptyset \}$.
+
+---
+
+## Algorithm Overview
+
+The *energy-I-Score* is computed iteratively for each variable with missing data. The following steps are performed for each $j \in \mathcal{S}$.
+
+
+### Step 1: Selection of Predictor Set
+
+We determine the set of predictor variables:
+\[
+O_j = \bigcap_{m \in L_j} \{ l : m_l = 0 \}.
+\]
+
+If $O_j$ is empty, the algorithm automatically selects a fallback variable $k^*$ defined as:
+\[
+k^* = \text{argmax}_{k \neq j} \big|\{ i : m_{i,\cdot} \in L_j \cap L_k \}\big|.
+\]
+which is a variable with the largest number of observed values for the observed part of column $j$. This ensures that the imputation model has at least one predictor.
+
+
+### Step 2: Data Partitioning
+
+The data are split into training and test sets as follows:
+
+\[
+\text{Train} =
+\begin{bmatrix}
+\mathrm{NA} & \tilde{X}_{L_j, O_j} \\
+\tilde{X}_{L_j^c, j} & \tilde{X}_{L_j^c, O_j}
+\end{bmatrix},
+\quad
+\text{Test} =
+\begin{bmatrix}
+\tilde{X}_{L_j, j}
+\end{bmatrix}.
+\]
+
+- The **training set** contains the observed predictor values and missing target values to be imputed.
+- The **test set** contains the observed target values to evaluate imputation quality.
+
+
+### Step 3: Multiple Imputations
+
+The missing part of the training set is imputed $N$ times using $\mathcal{I}$:
+\[
+\tilde{X}_{i,j}^{(1)}, \ldots, \tilde{X}_{i,j}^{(N)} \sim H_{X_j|X_{O_j}, M_j = 1}.
+\]
+
+Each imputation represents a draw from the conditional distribution of the missing variable given the observed predictors.
+
+
+### Step 4: Energy Distance Calculation
+
+For each $i \in L_j$, the *energy-I-Score* component is computed as:
+\[
+\widehat{S}^j_{\mathrm{NA}}(H,P) = 
+\frac{1}{|L_j|} \sum_{i \in L_j} 
+\left[
+\frac{1}{2N^2} \sum_{l=1}^N \sum_{\ell=1}^N 
+|\tilde{X}_{i,j}^{(l)} - \tilde{X}_{i,j}^{(\ell)}|
+- 
+\frac{1}{N} \sum_{l=1}^N 
+|\tilde{X}_{i,j}^{(l)} - x_{i,j}|
+\right].
+\]
+
+The first term is internal dispersion of the imputed values and the second term is distance between the imputed and the actual observations. The larger the score, the greater the uncertainty of the imputation relative to the true data.
+
+
+
+### Step 5: Weighting
+
+Each variable’s contribution to the final score is weighted by:
+\[
+w_j = \frac{1}{n^2} |L_j| \cdot |L_j^c|.
+\]
+
+This accounts for the relative amount of missing and observed data per variable.
+
+
+
+### Step 6: Final Score
+
+The final *energy-I-Score* is a weighted average over all variables with missing values:
+\[
+\widehat{S}_{\mathrm{NA}}(H,P) =
+\frac{1}{|\mathcal{S}|} \sum_{j \in \mathcal{S}} 
+w_j \widehat{S}^j_{\mathrm{NA}}(H,P).
+\]
+
+This scalar measure summarizes the **imputation uncertainty** across the dataset.
+
+---
+
+## Practical Interpretation
+
+- **High values** of the score suggest large variability or poor alignment between imputed and observed distributions.
+
+- **Low values** indicate imputations that are close to the observed data distribution (better performance).
+- Variables with few missing values have lower weight, while those with many missing values contribute more.
+
+- **Methods that do not rely on multiple imputation** or have a **weak/random draw mechanism** tend to perform worse, because they underestimate the uncertainty of the missing values.
+
+- The *energy-I-Score* should primarily be used to **rank different imputation methods**, rather than to interpret its absolute numeric value directly.
