@@ -44,5 +44,5 @@ Ximp <- complete(imp)
 
 If you use miceDRF in your research, please cite the following work:
 
-https://doi.org/10.48550/arXiv.2403.19196
+https://doi.org/10.48550/arXiv.2507.11297
 
