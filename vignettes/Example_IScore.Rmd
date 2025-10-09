@@ -162,6 +162,10 @@ energy_dist(windspeed, impute_rf(windspeed_miss))
 energy_dist(windspeed, impute_zero(windspeed_miss))
 ```
 
+# References
+
+This approach follows the methodology proposed by Näf, Grzesiak, and Scornet (2025) in "How to rank imputation methods?" (arXiv:2507.11297).
+
 
 
 

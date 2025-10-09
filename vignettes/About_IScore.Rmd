@@ -142,3 +142,8 @@ This scalar measure summarizes the **imputation uncertainty** across the dataset
 - **Methods that do not rely on multiple imputation** or have a **weak/random draw mechanism** tend to perform worse, because they underestimate the uncertainty of the missing values.
 
 - The *energy-I-Score* should primarily be used to **rank different imputation methods**, rather than to interpret its absolute numeric value directly.
+
+
+# References
+
+This approach follows the methodology proposed by Näf, Grzesiak, and Scornet (2025) in "How to rank imputation methods?" (arXiv:2507.11297).
