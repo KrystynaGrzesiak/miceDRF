@@ -8,7 +8,7 @@
 #' methods <- "pmm"
 #' imputation_funcs <- create_mice_imputations(methods)
 #'
-#' @keywords internal
+#' @export
 #'
 
 create_mice_imputation <- function(method) {
