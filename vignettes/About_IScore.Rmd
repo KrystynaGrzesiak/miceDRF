@@ -17,11 +17,11 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This vignette presents the implementation details of the *energy-I-Score*, a metric designed to **evaluate the quality of imputation methods** in incomplete datasets.  
+This vignette presents the implementation details of the *energy-I-Score*, a metric designed to evaluate the quality of imputation methods in incomplete datasets.  
 
-The score is based on the concept of **energy distance** between observed and imputed distributions. It allows comparing the uncertainty induced by the imputation model with the variability present in the observed data. The procedure is model-agnostic: it can be used with any imputation method $\mathcal{I}$ and with multiple imputation draws.
+The score is based on the concept of energy distance between observed and imputed distributions. It allows comparing the uncertainty induced by the imputation model with the variability present in the observed data. The procedure is model-agnostic: it can be used with any imputation method $\mathcal{I}$ and with multiple imputation draws.
 
-The score is **distribution-free** and can be applied to:
+The score is distribution-free and can be applied to:
 
 - continuous variables,
 - mixed-type data (here the score is calculated on dummy variables),
@@ -128,20 +128,20 @@ The final *energy-I-Score* is a weighted average over all variables with missing
 w_j \widehat{S}^j_{\mathrm{NA}}(H,P).
 \]
 
-This scalar measure summarizes the **imputation uncertainty** across the dataset.
+This scalar measure summarizes the imputation uncertainty across the dataset.
 
 ---
 
 ## Practical Interpretation
 
-- **High values** of the score suggest large variability or poor alignment between imputed and observed distributions.
+- High values of the score suggest large variability or poor alignment between imputed and observed distributions.
 
-- **Low values** indicate imputations that are close to the observed data distribution (better performance).
+- Low values indicate imputations that are close to the observed data distribution (better performance).
 - Variables with few missing values have lower weight, while those with many missing values contribute more.
 
-- **Methods that do not rely on multiple imputation** or have a **weak/random draw mechanism** tend to perform worse, because they underestimate the uncertainty of the missing values.
+- Methods that do not rely on multiple imputation or have a weak/random draw mechanism tend to perform worse, because they underestimate the uncertainty of the missing values.
 
-- The *energy-I-Score* should primarily be used to **rank different imputation methods**, rather than to interpret its absolute numeric value directly.
+- The *energy-I-Score* should primarily be used to rank different imputation methods, rather than to interpret its absolute numeric value directly.
 
 
 # References
