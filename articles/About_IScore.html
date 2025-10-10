@@ -69,17 +69,16 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This vignette presents the implementation details of the
-<em>energy-I-Score</em>, a metric designed to <strong>evaluate the
-quality of imputation methods</strong> in incomplete datasets.</p>
-<p>The score is based on the concept of <strong>energy distance</strong>
-between observed and imputed distributions. It allows comparing the
-uncertainty induced by the imputation model with the variability present
-in the observed data. The procedure is model-agnostic: it can be used
-with any imputation method
+<em>energy-I-Score</em>, a metric designed to evaluate the quality of
+imputation methods in incomplete datasets.</p>
+<p>The score is based on the concept of energy distance between observed
+and imputed distributions. It allows comparing the uncertainty induced
+by the imputation model with the variability present in the observed
+data. The procedure is model-agnostic: it can be used with any
+imputation method
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℐ</mi><annotation encoding="application/x-tex">\mathcal{I}</annotation></semantics></math>
 and with multiple imputation draws.</p>
-<p>The score is <strong>distribution-free</strong> and can be applied
-to:</p>
+<p>The score is distribution-free and can be applied to:</p>
 <ul>
 <li>continuous variables,</li>
 <li>mixed-type data (here the score is calculated on dummy
@@ -226,8 +225,8 @@ variables with missing values:
 \frac{1}{|\mathcal{S}|} \sum_{j \in \mathcal{S}} 
 w_j \widehat{S}^j_{\mathrm{NA}}(H,P).
 </annotation></semantics></math></p>
-<p>This scalar measure summarizes the <strong>imputation
-uncertainty</strong> across the dataset.</p>
+<p>This scalar measure summarizes the imputation uncertainty across the
+dataset.</p>
 <hr>
 </div>
 </div>
@@ -235,20 +234,18 @@ uncertainty</strong> across the dataset.</p>
 <h3 id="practical-interpretation">Practical Interpretation<a class="anchor" aria-label="anchor" href="#practical-interpretation"></a>
 </h3>
 <ul>
-<li><p><strong>High values</strong> of the score suggest large
-variability or poor alignment between imputed and observed
-distributions.</p></li>
-<li><p><strong>Low values</strong> indicate imputations that are close
-to the observed data distribution (better performance).</p></li>
+<li><p>High values of the score suggest large variability or poor
+alignment between imputed and observed distributions.</p></li>
+<li><p>Low values indicate imputations that are close to the observed
+data distribution (better performance).</p></li>
 <li><p>Variables with few missing values have lower weight, while those
 with many missing values contribute more.</p></li>
-<li><p><strong>Methods that do not rely on multiple imputation</strong>
-or have a <strong>weak/random draw mechanism</strong> tend to perform
-worse, because they underestimate the uncertainty of the missing
-values.</p></li>
-<li><p>The <em>energy-I-Score</em> should primarily be used to
-<strong>rank different imputation methods</strong>, rather than to
-interpret its absolute numeric value directly.</p></li>
+<li><p>Methods that do not rely on multiple imputation or have a
+weak/random draw mechanism tend to perform worse, because they
+underestimate the uncertainty of the missing values.</p></li>
+<li><p>The <em>energy-I-Score</em> should primarily be used to rank
+different imputation methods, rather than to interpret its absolute
+numeric value directly.</p></li>
 </ul>
 </div>
 </div>
