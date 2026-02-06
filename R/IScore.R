@@ -1,30 +1,9 @@
 
-#' Very internal function for getting mice methods
-#'
-#' @importFrom mice mice
-#' @importFrom mice complete
-#'
-#' @examples
-#' methods <- "pmm"
-#' imputation_funcs <- create_mice_imputations(methods)
-#'
-#' @export
-#'
-
-create_mice_imputation <- function(method) {
-  function(X) {
-    imp_dat <- mice(X, m = 1, method = method, printFlag = FALSE,
-                    visitSequence = "arabic")
-    mice::complete(imp_dat, action = "all")[[1]]
-  }
-}
-
-
-
 #' @title Calculates score for one imputation function
 #'
 #' @importFrom scoringRules crps_sample
 #' @importFrom pbapply pblapply
+#' @importFrom stats sd
 #'
 #' @param X data containing missing values denoted with NA's
 #' @param X_imp imputed dataset.
@@ -41,7 +20,7 @@ create_mice_imputation <- function(method) {
 #' @param skip_if_needed logical, indicating whether some observations should be
 #' skipped to obtain complete columns for scoring. If FALSE, NA will be returned
 #' for column with no observed variable for training.
-#' @param scale logica. If TRUE, each variable is scaled in the score.
+#' @param scale a logical value. If TRUE, each variable is scaled in the score.
 #'
 #' @return a numerical value denoting weighted Imputation Score obtained for
 #' provided imputation function and a table with scores and weights calculated

@@ -38,7 +38,7 @@ be taken under consideration.}
 skipped to obtain complete columns for scoring. If FALSE, NA will be returned
 for column with no observed variable for training.}
 
-\item{scale}{logica. If TRUE, each variable is scaled in the score.}
+\item{scale}{a logical value. If TRUE, each variable is scaled in the score.}
 }
 \value{
 a numerical value denoting weighted Imputation Score obtained for

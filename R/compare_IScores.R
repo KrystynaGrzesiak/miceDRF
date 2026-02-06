@@ -4,7 +4,13 @@
 #' @importFrom mice mice
 #' @importFrom mice complete
 #'
+#' @param methods a character vector of names of imputation methods from
+#' \code{mice} package. For more details see \link[mice]{mice}.
+#'
 #' @param methods a character vector of names of mice methods
+#'
+#' @return a named list of wrappers for mice imputation according to provided
+#' methods.
 #'
 #' @examples
 #' methods <- c("pmm", "cart", "sample", "norm.nob", "DRF")
@@ -14,11 +20,34 @@
 #'
 create_mice_imputations <- function(methods) {
   imp_list <- lapply(methods, function(method) {
-    miceDRF:::create_mice_imputation(method)
+    create_mice_imputation(method)
   })
   names(imp_list) <- methods
   imp_list
 }
+
+
+
+#' Very internal function for getting mice methods
+#'
+#' @param method a character name of imputation method from \code{mice} package.
+#' For more details see \link[mice]{mice}.
+#'
+#' @examples
+#' methods <- "pmm"
+#' imputation_funcs <- create_mice_imputations(methods)
+#'
+#' @export
+#'
+
+create_mice_imputation <- function(method) {
+  function(X) {
+    imp_dat <- mice(X, m = 1, method = method, printFlag = FALSE,
+                    visitSequence = "arabic")
+    mice::complete(imp_dat, action = "all")[[1]]
+  }
+}
+
 
 
 

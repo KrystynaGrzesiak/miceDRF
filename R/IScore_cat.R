@@ -12,9 +12,9 @@ factor_to_numeric <- function(factor_col) {
 
 #' One hot encoding
 #'
-#' A supplementarty function for one-hot encoding
+#' A supplementary function for one-hot encoding
 #'
-#' @param dat a data containinig some factor but numeric columns.
+#' @param dat a data containing some factor but numeric columns.
 #'
 factor_to_onehot <- function(dat) {
 
@@ -114,6 +114,7 @@ do_one_hot <- function(vec) {
 #'
 #' @importFrom scoringRules crps_sample
 #' @importFrom pbapply pblapply
+#' @importFrom stats model.matrix
 #' @inheritParams Iscore
 #'
 #' @param factor_vars a logical value indicating whether imputation should be

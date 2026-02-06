@@ -18,11 +18,23 @@ mice.impute.DRF(
 \arguments{
 \item{y}{Vector to be imputed.}
 
-\item{ry}{Logical vector indicating which elements of `y` are used to fit the imputation model (TRUE = observed).}
+\item{ry}{Logical vector indicating which elements of `y` are used to fit the
+imputation model (TRUE = observed).}
 
-\item{x}{Numeric design matrix with `length(y)` rows, containing predictors for `y` and no missing values.}
+\item{x}{Numeric design matrix with `length(y)` rows, containing predictors
+for `y` and no missing values.}
 
-\item{wy}{Logical vector indicating elements of `y` for which imputations are generated.}
+\item{wy}{Logical vector indicating elements of `y` for which imputations are
+generated.}
+
+\item{min.node.size}{target minimum number of observations in each tree leaf
+in DRF. The default value is 5.}
+
+\item{num.features}{the number of random features to sample.}
+
+\item{num.trees}{number of trees in DRF. Default to 10.}
+
+\item{...}{used for compatibility with \code{mice} package.}
 }
 \description{
 This function performs imputation using MICE and Distributional Random Forest

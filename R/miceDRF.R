@@ -45,9 +45,16 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
     })
   }
 
-  args <- c(list(data = missdf, method = "DRF", printFlag = printFlag, m = m), args)
+  args <- c(list(data = missdf, method = "DRF", printFlag = printFlag, m = m),
+            args)
 
   imputed <- do.call(mice::mice, args)
+
+  if(m > 1) {
+    res <- lapply(1:m, function(i) mice::complete(imputed, i))
+    names(res) <- paste0("imp", 1:m)
+    return(res)
+  }
 
   mice::complete(imputed)
 }
@@ -58,6 +65,7 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
 #' This function performs imputation using MICE and Distributional Random Forest
 #'
 #' @importFrom drf drf
+#' @importFrom stats predict
 #'
 #' @param y Vector to be imputed.
 #' @param ry Logical vector indicating which elements of `y` are used to fit the
@@ -66,7 +74,11 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
 #' for `y` and no missing values.
 #' @param wy Logical vector indicating elements of `y` for which imputations are
 #' generated.
-
+#' @param min.node.size target minimum number of observations in each tree leaf
+#' in DRF. The default value is 5.
+#' @param num.features the number of random features to sample.
+#' @param num.trees number of trees in DRF. Default to 10.
+#' @param ... used for compatibility with \code{mice} package.
 #'
 #' @references
 #' This method is described in detail in:
@@ -110,10 +122,10 @@ mice.impute.DRF <- function (y, ry, x, wy = NULL, min.node.size = 1,
 
   DRFw <- predict(fit, newdata = xmis)$weights # These are the nodes now
 
-  impute <- vapply(1:nrow(xmis), function(s) {
+  imputed <- vapply(1:nrow(xmis), function(s) {
     yobs[sample(1:nrow(yobs), size = 1, replace = T, prob = DRFw[s, ]), ]
   }, numeric(m))  # sample one observation per xmis
 
-  impute
+  imputed
 
 }

@@ -7,8 +7,8 @@
 factor_to_onehot(dat)
 }
 \arguments{
-\item{dat}{a data containinig some factor but numeric columns.}
+\item{dat}{a data containing some factor but numeric columns.}
 }
 \description{
-A supplementarty function for one-hot encoding
+A supplementary function for one-hot encoding
 }

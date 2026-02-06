@@ -9,6 +9,10 @@ create_mice_imputations(methods)
 \arguments{
 \item{methods}{a character vector of names of mice methods}
 }
+\value{
+a named list of wrappers for mice imputation according to provided
+methods.
+}
 \description{
 A function creating list of mice imputation functions
 }
