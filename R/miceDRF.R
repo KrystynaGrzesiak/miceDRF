@@ -105,7 +105,7 @@ mice.impute.DRF <- function (y, ry, x, wy = NULL, min.node.size = 1,
              num.features = num.features,
              compute.oob.predictions = F,
              min.node.size = min.node.size,
-             ci.group.size=num.trees) #ci.group.size=1, is also possible
+             ci.group.size=1) #ci.group.size=num.trees, is also possible, but appears to be slower
 
   DRFw <- predict(fit, newdata = xmis)$weights # These are the nodes now
 
