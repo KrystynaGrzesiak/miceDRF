@@ -16,19 +16,13 @@ mice.impute.DRF(
 )
 }
 \arguments{
-\item{y}{words, words...}
+\item{y}{Vector to be imputed.}
 
-\item{ry}{words, words...}
+\item{ry}{Logical vector indicating which elements of `y` are used to fit the imputation model (TRUE = observed).}
 
-\item{x}{words, words...}
+\item{x}{Numeric design matrix with `length(y)` rows, containing predictors for `y` and no missing values.}
 
-\item{wy}{words, words...}
-
-\item{min.node.size}{words, words...}
-
-\item{num.features}{words, words...}
-
-\item{num.trees}{words, words...}
+\item{wy}{Logical vector indicating elements of `y` for which imputations are generated.}
 }
 \description{
 This function performs imputation using MICE and Distributional Random Forest

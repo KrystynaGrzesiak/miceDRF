@@ -2,9 +2,7 @@
 % Please edit documentation in R/IScore_cat.R
 \name{do_one_hot}
 \alias{do_one_hot}
-\title{One hot encoding
-
-A supplementarty function for one-hot encoding}
+\title{One hot encoding}
 \usage{
 do_one_hot(vec)
 }
@@ -12,7 +10,5 @@ do_one_hot(vec)
 \item{vec}{a factor vector to be encoded}
 }
 \description{
-One hot encoding
-
 A supplementarty function for one-hot encoding
 }

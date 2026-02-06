@@ -2,9 +2,7 @@
 % Please edit documentation in R/IScore_cat.R
 \name{factor_to_onehot}
 \alias{factor_to_onehot}
-\title{One hot encoding
-
-A supplementarty function for one-hot encoding}
+\title{One hot encoding}
 \usage{
 factor_to_onehot(dat)
 }
@@ -12,7 +10,5 @@ factor_to_onehot(dat)
 \item{dat}{a data containinig some factor but numeric columns.}
 }
 \description{
-One hot encoding
-
 A supplementarty function for one-hot encoding
 }

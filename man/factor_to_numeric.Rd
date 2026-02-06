@@ -2,9 +2,7 @@
 % Please edit documentation in R/IScore_cat.R
 \name{factor_to_numeric}
 \alias{factor_to_numeric}
-\title{Internal function for changing factors to numerical
-
-A supplementarty function for data management}
+\title{Internal function for changing factors to numerical}
 \usage{
 factor_to_numeric(factor_col)
 }
@@ -12,7 +10,5 @@ factor_to_numeric(factor_col)
 \item{factor_col}{a factor column}
 }
 \description{
-Internal function for changing factors to numerical
-
 A supplementarty function for data management
 }

@@ -14,6 +14,6 @@ A function creating list of mice imputation functions
 }
 \examples{
 methods <- c("pmm", "cart", "sample", "norm.nob", "DRF")
-reate_mice_imputations(methods)
+create_mice_imputations(methods)
 
 }

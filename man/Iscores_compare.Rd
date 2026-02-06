@@ -14,11 +14,24 @@ Iscores_compare(
 )
 }
 \arguments{
+\item{X}{data containing missing values denoted with NA's}
+
 \item{imputation_list}{a list of imputation functions}
 
 \item{methods}{a character vector of names of methods in
 \code{imputation_list}. It can be \code{NULL}, then the function will attempt
 to get names from \code{imputation_list} object.}
+
+\item{N}{a numeric value. Number of samples from imputation distribution H.
+Default to 50.}
+
+\item{max_length}{Maximum number of variables \eqn{X_j} to consider, can
+speed up the code. Default to \code{NULL} meaning that all the columns will
+be taken under consideration.}
+
+\item{skip_if_needed}{logical, indicating whether some observations should be
+skipped to obtain complete columns for scoring. If FALSE, NA will be returned
+for column with no observed variable for training.}
 }
 \value{
 a vector of IScores for provided methods
