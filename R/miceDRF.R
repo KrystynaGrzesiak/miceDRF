@@ -60,9 +60,12 @@ impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
 #' @importFrom drf drf
 #'
 #' @param y Vector to be imputed.
-#' @param ry Logical vector indicating which elements of `y` are used to fit the imputation model (TRUE = observed).
-#' @param x Numeric design matrix with `length(y)` rows, containing predictors for `y` and no missing values.
-#' @param wy Logical vector indicating elements of `y` for which imputations are generated.
+#' @param ry Logical vector indicating which elements of `y` are used to fit the
+#' imputation model (TRUE = observed).
+#' @param x Numeric design matrix with `length(y)` rows, containing predictors
+#' for `y` and no missing values.
+#' @param wy Logical vector indicating elements of `y` for which imputations are
+#' generated.
 
 #'
 #' @references
