@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' methods <- c("pmm", "cart", "sample", "norm.nob", "DRF")
-#' reate_mice_imputations(methods)
+#' create_mice_imputations(methods)
 #'
 #' @export
 #'
@@ -24,7 +24,7 @@ create_mice_imputations <- function(methods) {
 
 #' @title Calculates IScores for multiple imputation functions
 #'
-#' @inheritParams IScore
+#' @inheritParams Iscore
 #'
 #' @param imputation_list a list of imputation functions
 #' @param methods a character vector of names of methods in
