@@ -1,5 +1,5 @@
 
-#' @title Internal function for changing factors to numerical
+#' Internal function for changing factors to numerical
 #'
 #' A supplementarty function for data management
 #'
@@ -10,7 +10,7 @@ factor_to_numeric <- function(factor_col) {
   as.numeric(levels(factor_col))[factor_col]
 }
 
-#' @title One hot encoding
+#' One hot encoding
 #'
 #' A supplementarty function for one-hot encoding
 #'
@@ -38,7 +38,7 @@ factor_to_onehot <- function(dat) {
   dat
 }
 
-#' @title One hot encoding
+#' One hot encoding
 #'
 #' A supplementarty function for one-hot encoding
 #'
@@ -84,7 +84,7 @@ onehot_to_factor <- function(onehot_dat) {
 }
 
 
-#' @title One hot encoding
+#' One hot encoding
 #'
 #' A supplementarty function for one-hot encoding
 #'
@@ -110,7 +110,7 @@ do_one_hot <- function(vec) {
 
 
 
-#' @title Calculates score for a single imputation function
+#' energy-I-Score for imputation of categorical (mixed) data
 #'
 #' @importFrom scoringRules crps_sample
 #' @importFrom pbapply pblapply
