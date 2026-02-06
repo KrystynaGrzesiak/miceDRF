@@ -1,0 +1,86 @@
+# miceDRF: imputation with mice DRF and I-Score
+
+miceDRF is an R package that extends the functionality of the
+[mice](https://github.com/amices/mice) package by providing a new method
+for handling missing data using Distributed Random Forests (DRF).
+
+## Installation
+
+To install the latest development version directly from GitHub, run the
+following code in your R console:
+
+``` r
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+devtools::install_github("KrystynaGrzesiak/miceDRF")
+```
+
+## Example usage
+
+``` r
+
+library(miceDRF)
+library(mice)
+
+# Generate a random dataset
+n <- 200
+d <- 5
+X <- matrix(runif(n * d), nrow = n, ncol = d)
+
+# Introduce missing values
+pmiss <- 0.2
+X.NA <- apply(X, 2, function(x) {
+  U <- runif(length(x))
+  ifelse(U <= pmiss, NA, x)
+})
+
+# Perform imputation with DRF method
+imp <- mice(X.NA, m = 1, method = "DRF")
+Ximp <- complete(imp)
+```
+
+## Citation
+
+If you use miceDRF in your research, please cite the following work:
+
+<https://doi.org/10.48550/arXiv.2507.11297>
+
+# Package index
+
+## All functions
+
+- [`Iscore()`](https://krystynagrzesiak.github.io/miceDRF/reference/Iscore.md)
+  : Calculates score for one imputation function
+- [`Iscore_cat()`](https://krystynagrzesiak.github.io/miceDRF/reference/Iscore_cat.md)
+  : Calculates score for a single imputation function
+- [`Iscores_compare()`](https://krystynagrzesiak.github.io/miceDRF/reference/Iscores_compare.md)
+  : Calculates IScores for multiple imputation functions
+- [`create_mice_imputation()`](https://krystynagrzesiak.github.io/miceDRF/reference/create_mice_imputation.md)
+  : Very internal function for getting mice methods
+- [`create_mice_imputations()`](https://krystynagrzesiak.github.io/miceDRF/reference/create_mice_imputations.md)
+  : A function creating list of mice imputation functions
+- [`do_one_hot()`](https://krystynagrzesiak.github.io/miceDRF/reference/do_one_hot.md)
+  : One hot encoding A supplementarty function for one-hot encoding
+- [`energy_dist()`](https://krystynagrzesiak.github.io/miceDRF/reference/energy_dist.md)
+  : Energy distance
+- [`factor_to_numeric()`](https://krystynagrzesiak.github.io/miceDRF/reference/factor_to_numeric.md)
+  : Internal function for changing factors to numerical A supplementarty
+  function for data management
+- [`factor_to_onehot()`](https://krystynagrzesiak.github.io/miceDRF/reference/factor_to_onehot.md)
+  : One hot encoding A supplementarty function for one-hot encoding
+- [`impute_mice_drf()`](https://krystynagrzesiak.github.io/miceDRF/reference/impute_mice_drf.md)
+  : mice DRF (Distributional Random Forest)
+- [`mice.impute.DRF()`](https://krystynagrzesiak.github.io/miceDRF/reference/mice.impute.DRF.md)
+  : mice DRF (Distributional Random Forest)
+- [`onehot_to_factor()`](https://krystynagrzesiak.github.io/miceDRF/reference/onehot_to_factor.md)
+  : One hot encoding A supplementarty function for one-hot encoding
+
+# Articles
+
+### All vignettes
+
+- [Energy-I-Score: Implementation
+  Details](https://krystynagrzesiak.github.io/miceDRF/articles/About_IScore.md):
+- [Energy-I-Score: First
+  Steps](https://krystynagrzesiak.github.io/miceDRF/articles/Example_IScore.md):
