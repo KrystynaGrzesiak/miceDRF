@@ -9,7 +9,7 @@ Authors@R: c(
                role = c("aut", "ctb")),
           person("Jeffrey", "Näf", 
                email = "jeffrey@my-sh.ch", 
-               comment = c(ORCID = "..."),
+               comment = c(ORCID = "0000-0003-0920-1899"),
                role = c("aut", "cre")))
 Description: This package contains miceDRF imputation method and tools for 
     measuring imputation performance.
