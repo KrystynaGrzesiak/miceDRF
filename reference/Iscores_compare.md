@@ -119,5 +119,5 @@ Iscores_compare(X, imputation_list)
 #> No complete variables for training column 9. Skipping some observations.
 #> No complete variables for training column 2. Skipping some observations.
 #>    sample  norm.nob       pmm       DRF      cart 
-#> 0.5485229 0.5488967 0.5580149 0.5587692 0.5797292 
+#> 0.5485229 0.5488967 0.5583584 0.5587692 0.5797292 
 ```

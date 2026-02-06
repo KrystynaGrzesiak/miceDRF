@@ -44,7 +44,9 @@ Ximp <- complete(imp)
 
 If you use miceDRF in your research, please cite the following work:
 
-<https://doi.org/10.48550/arXiv.2507.11297>
+Näf, J., Grzesiak, K., and Scornet, E. (2025a). How to rank imputation
+methods? arXiv preprint arXiv:2507.11297
+(<https://doi.org/10.48550/arXiv.2507.11297>).
 
 # Package index
 

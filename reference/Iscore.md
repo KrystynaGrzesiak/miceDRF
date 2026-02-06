@@ -65,6 +65,14 @@ a numerical value denoting weighted Imputation Score obtained for
 provided imputation function and a table with scores and weights
 calculated for particular columns.
 
+## References
+
+This method is described in detail in:
+
+Näf, J., Grzesiak, K., and Scornet, E. (2025a). How to rank imputation
+methods? arXiv preprint arXiv:2507.11297
+(<https://doi.org/10.48550/arXiv.2507.11297>).
+
 ## Examples
 
 ``` r
@@ -85,17 +93,17 @@ miceDRF::Iscore(X, X_imp, N = 50, imputation_func = imputation_func)
 #> No complete variables for training column 4. Skipping some observations.
 #> No complete variables for training column 9. Skipping some observations.
 #> No complete variables for training column 2. Skipping some observations.
-#> [1] 0.5580149
+#> [1] 0.5583584
 #> attr(,"dat")
 #>     column_id weight     score n_columns_used
 #> V1          1 0.2499 0.5616408              1
-#> V3          3 0.2491 0.4399447              1
+#> V3          3 0.2491 0.4377913              1
 #> V8          8 0.2475 0.5055475              1
-#> V10        10 0.2475 0.5871200              1
+#> V10        10 0.2475 0.5922144              1
 #> V5          5 0.2464 0.6850586              1
 #> V6          6 0.2436 0.5006411              1
 #> V7          7 0.2379 0.6925815              1
-#> V4          4 0.2331 0.5289814              1
+#> V4          4 0.2331 0.5294290              1
 #> V9          9 0.2331 0.5369845              1
 #> V2          2 0.2244 0.5429367              1
 

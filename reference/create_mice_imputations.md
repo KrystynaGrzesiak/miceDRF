@@ -31,8 +31,8 @@ create_mice_imputations(methods)
 #>         visitSequence = "arabic")
 #>     mice::complete(imp_dat, action = "all")[[1]]
 #> }
-#> <bytecode: 0x5568c64c3b98>
-#> <environment: 0x5568c9e888d8>
+#> <bytecode: 0x5589afd04aa0>
+#> <environment: 0x5589b1560358>
 #> 
 #> $cart
 #> function (X) 
@@ -41,8 +41,8 @@ create_mice_imputations(methods)
 #>         visitSequence = "arabic")
 #>     mice::complete(imp_dat, action = "all")[[1]]
 #> }
-#> <bytecode: 0x5568c64c3b98>
-#> <environment: 0x5568c9e88638>
+#> <bytecode: 0x5589afd04aa0>
+#> <environment: 0x5589b15600b8>
 #> 
 #> $sample
 #> function (X) 
@@ -51,8 +51,8 @@ create_mice_imputations(methods)
 #>         visitSequence = "arabic")
 #>     mice::complete(imp_dat, action = "all")[[1]]
 #> }
-#> <bytecode: 0x5568c64c3b98>
-#> <environment: 0x5568c9e88398>
+#> <bytecode: 0x5589afd04aa0>
+#> <environment: 0x5589b155fe18>
 #> 
 #> $norm.nob
 #> function (X) 
@@ -61,8 +61,8 @@ create_mice_imputations(methods)
 #>         visitSequence = "arabic")
 #>     mice::complete(imp_dat, action = "all")[[1]]
 #> }
-#> <bytecode: 0x5568c64c3b98>
-#> <environment: 0x5568c9e880f8>
+#> <bytecode: 0x5589afd04aa0>
+#> <environment: 0x5589b155fb78>
 #> 
 #> $DRF
 #> function (X) 
@@ -71,7 +71,7 @@ create_mice_imputations(methods)
 #>         visitSequence = "arabic")
 #>     mice::complete(imp_dat, action = "all")[[1]]
 #> }
-#> <bytecode: 0x5568c64c3b98>
-#> <environment: 0x5568c9e87e58>
+#> <bytecode: 0x5589afd04aa0>
+#> <environment: 0x5589b155f8d8>
 #> 
 ```
