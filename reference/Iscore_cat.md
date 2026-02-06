@@ -1,6 +1,6 @@
-# Calculates score for a single imputation function
+# energy-I-Score for imputation of categorical (mixed) data
 
-Calculates score for a single imputation function
+energy-I-Score for imputation of categorical (mixed) data
 
 ## Usage
 

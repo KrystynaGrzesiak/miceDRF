@@ -57,7 +57,11 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-imputation-list">imputation_list<a class="anchor" aria-label="anchor" href="#arg-imputation-list"></a></dt>
+<dl><dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
+<dd><p>data containing missing values denoted with NA's</p></dd>
+
+
+<dt id="arg-imputation-list">imputation_list<a class="anchor" aria-label="anchor" href="#arg-imputation-list"></a></dt>
 <dd><p>a list of imputation functions</p></dd>
 
 
@@ -65,6 +69,23 @@
 <dd><p>a character vector of names of methods in
 <code>imputation_list</code>. It can be <code>NULL</code>, then the function will attempt
 to get names from <code>imputation_list</code> object.</p></dd>
+
+
+<dt id="arg-n">N<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
+<dd><p>a numeric value. Number of samples from imputation distribution H.
+Default to 50.</p></dd>
+
+
+<dt id="arg-max-length">max_length<a class="anchor" aria-label="anchor" href="#arg-max-length"></a></dt>
+<dd><p>Maximum number of variables \(X_j\) to consider, can
+speed up the code. Default to <code>NULL</code> meaning that all the columns will
+be taken under consideration.</p></dd>
+
+
+<dt id="arg-skip-if-needed">skip_if_needed<a class="anchor" aria-label="anchor" href="#arg-skip-if-needed"></a></dt>
+<dd><p>logical, indicating whether some observations should be
+skipped to obtain complete columns for scoring. If FALSE, NA will be returned
+for column with no observed variable for training.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -138,7 +159,7 @@ to get names from <code>imputation_list</code> object.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No complete variables for training column 9. Skipping some observations.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No complete variables for training column 2. Skipping some observations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    sample  norm.nob       pmm       DRF      cart </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.5485229 0.5488967 0.5583584 0.5587692 0.5797292 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.5485229 0.5488967 0.5580149 0.5587692 0.5797292 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

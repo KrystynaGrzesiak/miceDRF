@@ -1,8 +1,6 @@
-# One hot encoding A supplementarty function for one-hot encoding
+# One hot encoding
 
-One hot encoding
-
-A supplementarty function for one-hot encoding
+A supplementary function for one-hot encoding
 
 ## Usage
 
@@ -14,4 +12,4 @@ factor_to_onehot(dat)
 
 - dat:
 
-  a data containinig some factor but numeric columns.
+  a data containing some factor but numeric columns.

@@ -54,12 +54,66 @@
 <dd><p>a character vector of names of mice methods</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>a named list of wrappers for mice imputation according to provided
+methods.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">methods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pmm"</span>, <span class="st">"cart"</span>, <span class="st">"sample"</span>, <span class="st">"norm.nob"</span>, <span class="st">"DRF"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">reate_mice_imputations</span><span class="op">(</span><span class="va">methods</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in reate_mice_imputations(methods):</span> could not find function "reate_mice_imputations"</span>
+<span class="r-in"><span><span class="fu">create_mice_imputations</span><span class="op">(</span><span class="va">methods</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $pmm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (X) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     imp_dat &lt;- mice(X, m = 1, method = method, printFlag = FALSE, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         visitSequence = "arabic")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mice::complete(imp_dat, action = "all")[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5568c64c3b98&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5568c9e888d8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $cart</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (X) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     imp_dat &lt;- mice(X, m = 1, method = method, printFlag = FALSE, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         visitSequence = "arabic")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mice::complete(imp_dat, action = "all")[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5568c64c3b98&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5568c9e88638&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sample</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (X) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     imp_dat &lt;- mice(X, m = 1, method = method, printFlag = FALSE, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         visitSequence = "arabic")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mice::complete(imp_dat, action = "all")[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5568c64c3b98&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5568c9e88398&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $norm.nob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (X) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     imp_dat &lt;- mice(X, m = 1, method = method, printFlag = FALSE, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         visitSequence = "arabic")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mice::complete(imp_dat, action = "all")[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5568c64c3b98&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5568c9e880f8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DRF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (X) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     imp_dat &lt;- mice(X, m = 1, method = method, printFlag = FALSE, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         visitSequence = "arabic")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mice::complete(imp_dat, action = "all")[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5568c64c3b98&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5568c9e87e58&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

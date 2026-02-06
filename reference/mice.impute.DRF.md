@@ -22,31 +22,39 @@ mice.impute.DRF(
 
 - y:
 
-  words, words...
+  Vector to be imputed.
 
 - ry:
 
-  words, words...
+  Logical vector indicating which elements of \`y\` are used to fit the
+  imputation model (TRUE = observed).
 
 - x:
 
-  words, words...
+  Numeric design matrix with \`length(y)\` rows, containing predictors
+  for \`y\` and no missing values.
 
 - wy:
 
-  words, words...
+  Logical vector indicating elements of \`y\` for which imputations are
+  generated.
 
 - min.node.size:
 
-  words, words...
+  target minimum number of observations in each tree leaf in DRF. The
+  default value is 5.
 
 - num.features:
 
-  words, words...
+  the number of random features to sample.
 
 - num.trees:
 
-  words, words...
+  number of trees in DRF. Default to 10.
+
+- ...:
+
+  used for compatibility with `mice` package.
 
 ## References
 

@@ -8,6 +8,13 @@ Very internal function for getting mice methods
 create_mice_imputation(method)
 ```
 
+## Arguments
+
+- method:
+
+  a character name of imputation method from `mice` package. For more
+  details see [mice](https://amices.org/mice/reference/mice.html).
+
 ## Examples
 
 ``` r

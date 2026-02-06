@@ -5,7 +5,8 @@
 - **Krystyna Grzesiak**. Author, contributor.
   [](https://orcid.org/0000-0003-2581-7722)
 
-- **Jeffrey Näf**. Author, maintainer. [](https://orcid.org/...)
+- **Jeffrey Näf**. Author, maintainer.
+  [](https://orcid.org/0000-0003-0920-1899)
 
 ## Citation
 

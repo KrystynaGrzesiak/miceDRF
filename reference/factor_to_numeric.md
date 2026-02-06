@@ -1,6 +1,4 @@
-# Internal function for changing factors to numerical A supplementarty function for data management
-
-Internal function for changing factors to numerical
+# Internal function for changing factors to numerical
 
 A supplementarty function for data management
 

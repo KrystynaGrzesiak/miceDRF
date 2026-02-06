@@ -17,6 +17,10 @@ Iscores_compare(
 
 ## Arguments
 
+- X:
+
+  data containing missing values denoted with NA's
+
 - imputation_list:
 
   a list of imputation functions
@@ -26,6 +30,23 @@ Iscores_compare(
   a character vector of names of methods in `imputation_list`. It can be
   `NULL`, then the function will attempt to get names from
   `imputation_list` object.
+
+- N:
+
+  a numeric value. Number of samples from imputation distribution H.
+  Default to 50.
+
+- max_length:
+
+  Maximum number of variables \\X_j\\ to consider, can speed up the
+  code. Default to `NULL` meaning that all the columns will be taken
+  under consideration.
+
+- skip_if_needed:
+
+  logical, indicating whether some observations should be skipped to
+  obtain complete columns for scoring. If FALSE, NA will be returned for
+  column with no observed variable for training.
 
 ## Value
 
@@ -98,5 +119,5 @@ Iscores_compare(X, imputation_list)
 #> No complete variables for training column 9. Skipping some observations.
 #> No complete variables for training column 2. Skipping some observations.
 #>    sample  norm.nob       pmm       DRF      cart 
-#> 0.5485229 0.5488967 0.5583584 0.5587692 0.5797292 
+#> 0.5485229 0.5488967 0.5580149 0.5587692 0.5797292 
 ```

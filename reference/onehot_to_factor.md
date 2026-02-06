@@ -1,6 +1,4 @@
-# One hot encoding A supplementarty function for one-hot encoding
-
-One hot encoding
+# One hot encoding
 
 A supplementarty function for one-hot encoding
 

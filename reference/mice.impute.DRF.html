@@ -60,31 +60,39 @@
 
 
 <dl><dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>words, words...</p></dd>
+<dd><p>Vector to be imputed.</p></dd>
 
 
 <dt id="arg-ry">ry<a class="anchor" aria-label="anchor" href="#arg-ry"></a></dt>
-<dd><p>words, words...</p></dd>
+<dd><p>Logical vector indicating which elements of `y` are used to fit the
+imputation model (TRUE = observed).</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>words, words...</p></dd>
+<dd><p>Numeric design matrix with `length(y)` rows, containing predictors
+for `y` and no missing values.</p></dd>
 
 
 <dt id="arg-wy">wy<a class="anchor" aria-label="anchor" href="#arg-wy"></a></dt>
-<dd><p>words, words...</p></dd>
+<dd><p>Logical vector indicating elements of `y` for which imputations are
+generated.</p></dd>
 
 
 <dt id="arg-min-node-size">min.node.size<a class="anchor" aria-label="anchor" href="#arg-min-node-size"></a></dt>
-<dd><p>words, words...</p></dd>
+<dd><p>target minimum number of observations in each tree leaf
+in DRF. The default value is 5.</p></dd>
 
 
 <dt id="arg-num-features">num.features<a class="anchor" aria-label="anchor" href="#arg-num-features"></a></dt>
-<dd><p>words, words...</p></dd>
+<dd><p>the number of random features to sample.</p></dd>
 
 
 <dt id="arg-num-trees">num.trees<a class="anchor" aria-label="anchor" href="#arg-num-trees"></a></dt>
-<dd><p>words, words...</p></dd>
+<dd><p>number of trees in DRF. Default to 10.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>used for compatibility with <code>mice</code> package.</p></dd>
 
 </dl></div>
     <div class="section level2">
