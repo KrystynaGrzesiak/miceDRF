@@ -50,6 +50,13 @@
 #'
 #' Iscore(X, X_imp, N = 50, imputation_func = imputation_func, multiple = FALSE)
 #'
+#' @references
+#' This method is described in detail in:
+#'
+#' Näf, J., Grzesiak, K., and Scornet, E. (2025a). How to rank imputation
+#' methods? arXiv preprint arXiv:2507.11297
+#' (\url{https://doi.org/10.48550/arXiv.2507.11297}).
+#'
 #' @export
 #'
 
