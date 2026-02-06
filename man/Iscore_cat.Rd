@@ -2,7 +2,7 @@
 % Please edit documentation in R/IScore_cat.R
 \name{Iscore_cat}
 \alias{Iscore_cat}
-\title{Calculates score for a single imputation function}
+\title{energy-I-Score for imputation of categorical (mixed) data}
 \usage{
 Iscore_cat(
   X,
@@ -48,7 +48,7 @@ provided imputation function and a table with scores and weights calculated
 for particular columns.
 }
 \description{
-Calculates score for a single imputation function
+energy-I-Score for imputation of categorical (mixed) data
 }
 \details{
 The categorical variables should be stored as factors. If you need additional
