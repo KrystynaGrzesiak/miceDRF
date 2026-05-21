@@ -1,51 +1,81 @@
-# miceDRF: imputation with mice DRF and I-Score
+# miceDRF: Imputation with Distributional Random Forests in MICE
 
-miceDRF is an R package that extends the functionality of the [mice](https://github.com/amices/mice) package by providing a new method for handling missing data using Distributed Random Forests (DRF).
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/KrystynaGrzesiak/miceDRF/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KrystynaGrzesiak/miceDRF/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
+`miceDRF` provides an imputation method for the
+[`mice`](https://github.com/amices/mice) framework based on
+distributional random forests (DRF).
+
+The package extends multiple imputation by chained equations (MICE) with
+a nonparametric approach that models conditional distributions rather
+than only conditional means. This allows flexible imputation of complex
+data structures, nonlinear effects, and heterogeneous conditional
+distributions.
+
+The method can be used directly within the standard `mice` workflow via:
+
+```r
+method = "DRF"
+```
 
 ## Installation
 
-To install the latest development version directly from GitHub, run the following code in your R console:
+Install the development version from GitHub with:
 
-```R
+```r
 if (!requireNamespace("devtools", quietly = TRUE)) {
   install.packages("devtools")
 }
-devtools::install_github("KrystynaGrzesiak/miceDRF")
 
+devtools::install_github("KrystynaGrzesiak/miceDRF")
 ```
 
-## Example usage
+## Example
 
-```R
-
-library(miceDRF)
+```r
 library(mice)
+library(miceDRF)
 
-# Generate a random dataset
+set.seed(123)
+
+# Generate data
 n <- 200
 d <- 5
+
 X <- matrix(runif(n * d), nrow = n, ncol = d)
 
 # Introduce missing values
 pmiss <- 0.2
+
 X.NA <- apply(X, 2, function(x) {
   U <- runif(length(x))
   ifelse(U <= pmiss, NA, x)
 })
 
-# Perform imputation with DRF method
+# Imputation with DRF
 imp <- mice(X.NA, m = 1, method = "DRF")
-Ximp <- complete(imp)
 
+Ximp <- complete(imp)
 ```
+
+## References
+
+Näf, J., Scornet, E., & Josse, J. (2024).
+*What is a good imputation under MAR missingness?*
+arXiv preprint.
+https://arxiv.org/abs/2403.19196
+
+Cevid, D., Michel, L., Näf, J., Meinshausen, N., and Buehlmann, P. (2022).
+*Distributional random forests: Heterogeneity adjustment and multivariate distributional regression.*
+Journal of Machine Learning Research, 23(333), 1–79.
 
 ## Citation
 
-If you use miceDRF in your research, please cite the following work:
+If you use `miceDRF` in your research, please cite:
 
-Näf, J., Grzesiak, K., and Scornet, E. (2025a). How to rank imputation methods? arXiv
-preprint arXiv:2507.11297 (https://doi.org/10.48550/arXiv.2507.11297).
-
-
-
+Näf, J., Grzesiak, K., and Scornet, E. (2025).
+*How to rank imputation methods?*
+arXiv preprint arXiv:2507.11297.
+https://doi.org/10.48550/arXiv.2507.11297
