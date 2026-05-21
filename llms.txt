@@ -1,87 +1,89 @@
-# miceDRF: imputation with mice DRF and I-Score
+# miceDRF: Imputation with Distributional Random Forests in MICE
 
-miceDRF is an R package that extends the functionality of the
-[mice](https://github.com/amices/mice) package by providing a new method
-for handling missing data using Distributed Random Forests (DRF).
+`miceDRF` provides an imputation method for the
+[`mice`](https://github.com/amices/mice) framework based on
+distributional random forests (DRF).
+
+The package extends multiple imputation by chained equations (MICE) with
+a nonparametric approach that models conditional distributions rather
+than only conditional means. This allows flexible imputation of complex
+data structures, nonlinear effects, and heterogeneous conditional
+distributions.
+
+The method can be used directly within the standard `mice` workflow via:
+
+``` r
+
+method = "DRF"
+```
 
 ## Installation
 
-To install the latest development version directly from GitHub, run the
-following code in your R console:
+Install the development version from GitHub with:
 
 ``` r
+
 if (!requireNamespace("devtools", quietly = TRUE)) {
   install.packages("devtools")
 }
+
 devtools::install_github("KrystynaGrzesiak/miceDRF")
 ```
 
-## Example usage
+## Example
 
 ``` r
 
-library(miceDRF)
 library(mice)
+library(miceDRF)
 
-# Generate a random dataset
+set.seed(123)
+
+# Generate data
 n <- 200
 d <- 5
+
 X <- matrix(runif(n * d), nrow = n, ncol = d)
 
 # Introduce missing values
 pmiss <- 0.2
+
 X.NA <- apply(X, 2, function(x) {
   U <- runif(length(x))
   ifelse(U <= pmiss, NA, x)
 })
 
-# Perform imputation with DRF method
+# Imputation with DRF
 imp <- mice(X.NA, m = 1, method = "DRF")
+
 Ximp <- complete(imp)
 ```
 
+## References
+
+Näf, J., Scornet, E., & Josse, J. (2024). *What is a good imputation
+under MAR missingness?* arXiv preprint.
+<https://arxiv.org/abs/2403.19196>
+
+Cevid, D., Michel, L., Näf, J., Meinshausen, N., and Buehlmann, P.
+(2022). *Distributional random forests: Heterogeneity adjustment and
+multivariate distributional regression.* Journal of Machine Learning
+Research, 23(333), 1–79.
+
 ## Citation
 
-If you use miceDRF in your research, please cite the following work:
+If you use `miceDRF` in your research, please cite:
 
-Näf, J., Grzesiak, K., and Scornet, E. (2025a). How to rank imputation
-methods? arXiv preprint arXiv:2507.11297
-(<https://doi.org/10.48550/arXiv.2507.11297>).
+Näf, J., Grzesiak, K., and Scornet, E. (2025). *How to rank imputation
+methods?* arXiv preprint arXiv:2507.11297.
+<https://doi.org/10.48550/arXiv.2507.11297>
 
 # Package index
 
 ## All functions
 
-- [`Iscore()`](https://krystynagrzesiak.github.io/miceDRF/reference/Iscore.md)
-  : Calculates score for one imputation function
-- [`Iscore_cat()`](https://krystynagrzesiak.github.io/miceDRF/reference/Iscore_cat.md)
-  : energy-I-Score for imputation of categorical (mixed) data
-- [`Iscores_compare()`](https://krystynagrzesiak.github.io/miceDRF/reference/Iscores_compare.md)
-  : Calculates IScores for multiple imputation functions
-- [`create_mice_imputation()`](https://krystynagrzesiak.github.io/miceDRF/reference/create_mice_imputation.md)
-  : Very internal function for getting mice methods
-- [`create_mice_imputations()`](https://krystynagrzesiak.github.io/miceDRF/reference/create_mice_imputations.md)
-  : A function creating list of mice imputation functions
-- [`do_one_hot()`](https://krystynagrzesiak.github.io/miceDRF/reference/do_one_hot.md)
-  : One hot encoding
-- [`energy_dist()`](https://krystynagrzesiak.github.io/miceDRF/reference/energy_dist.md)
-  : Energy distance
-- [`factor_to_numeric()`](https://krystynagrzesiak.github.io/miceDRF/reference/factor_to_numeric.md)
-  : Internal function for changing factors to numerical
-- [`factor_to_onehot()`](https://krystynagrzesiak.github.io/miceDRF/reference/factor_to_onehot.md)
-  : One hot encoding
 - [`impute_mice_drf()`](https://krystynagrzesiak.github.io/miceDRF/reference/impute_mice_drf.md)
   : mice DRF (Distributional Random Forest)
 - [`mice.impute.DRF()`](https://krystynagrzesiak.github.io/miceDRF/reference/mice.impute.DRF.md)
   : mice DRF (Distributional Random Forest)
-- [`onehot_to_factor()`](https://krystynagrzesiak.github.io/miceDRF/reference/onehot_to_factor.md)
-  : One hot encoding
 
-# Articles
-
-### All vignettes
-
-- [Energy-I-Score: Implementation
-  Details](https://krystynagrzesiak.github.io/miceDRF/articles/About_IScore.md):
-- [Energy-I-Score: First
-  Steps](https://krystynagrzesiak.github.io/miceDRF/articles/Example_IScore.md):
