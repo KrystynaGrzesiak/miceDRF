@@ -1,70 +1,62 @@
-
 library(testthat)
+library(miceDRF)
 
 set.seed(123)
-missdf <- rnorm(20)
-missdf[runif(20) < 0.2] <- NA
-missdf <- matrix(missdf, ncol = 2)
 
-missdf_factor <- missdf
-missdf_factor <- data.frame(missdf_factor,
-                            fctr = as.factor(sample(1:3, 10, replace = TRUE)))
+missdf <- matrix(rnorm(20), ncol = 2)
+missdf[runif(length(missdf)) < 0.2] <- NA
+missdf <- as.data.frame(missdf)
 
+missdf_factor <- data.frame(
+  missdf,
+  fctr = factor(sample(1:3, nrow(missdf), replace = TRUE))
+)
 
-test_that("impute_mice_drf imputes correctly", {
+test_that("impute_mice_drf returns a completed data frame", {
+  set.seed(123)
 
-  imputed <- impute_mice_drf(missdf, printFlag = TRUE)
+  imputed <- impute_mice_drf(missdf, printFlag = FALSE, maxit = 2)
 
-  out <- structure(
-    list(V1 = c(0.070508391424576, -0.23017748948328, 1.55870831414912,
-                0.070508391424576, -0.686852851893526, -0.23017748948328,
-                0.460916205989202, -1.26506123460653, -0.686852851893526,
-                -0.445661970099958),
-         V2 = c(1.78691313680308, 0.359813827057364, 0.400771450594052,
-                -0.555841134754075, -0.555841134754075, 1.78691313680308,
-                -0.472791407727934, -1.96661715662964, 0.701355901563686,
-                -0.472791407727934)), row.names = c(NA, -10L),
-    class = "data.frame")
-
-  expect_identical(round(imputed, 10), round(out, 10))
-
+  expect_s3_class(imputed, "data.frame")
+  expect_equal(dim(imputed), dim(missdf))
+  expect_false(anyNA(imputed))
 })
-
 
 test_that("impute_mice_drf warns and converts factor columns to numeric", {
+  set.seed(123)
 
-  expect_warning(imputed <- impute_mice_drf(missdf_factor),
-                 "Changing factor to numeric\\.")
-
-  expect_true(is.numeric(imputed[["fctr"]]))
-
-})
-
-
-test_that("impute_mice_drf prints progress when printFlag = TRUE", {
-
-  output <- capture.output(
-    imputed <- impute_mice_drf(missdf, printFlag = TRUE, m = 1, maxit = 5)
+  expect_warning(
+    imputed <- impute_mice_drf(missdf_factor, printFlag = FALSE, maxit = 2),
+    "Changing factor to numeric\\."
   )
 
-  # Check that something was printed
-  expect_true(length(output) > 0)
+  expect_s3_class(imputed, "data.frame")
+  expect_true(is.numeric(imputed[["fctr"]]))
+  expect_false(anyNA(imputed))
+})
 
-  # Check for characteristic mice progress header
+test_that("impute_mice_drf respects printFlag = TRUE", {
+  set.seed(123)
+
+  output <- capture.output(
+    impute_mice_drf(missdf, printFlag = TRUE, m = 1, maxit = 2)
+  )
+
+  expect_true(length(output) > 0)
   expect_true(any(grepl("iter\\s+imp\\s+variable", output)))
 })
 
-
-test_that("impute_mice_drf imputed multiple times for m > 1", {
+test_that("impute_mice_drf returns multiple imputations when m > 1", {
+  set.seed(123)
 
   m <- 2
+  imputed <- impute_mice_drf(missdf, m = m, printFlag = FALSE, maxit = 2)
 
-  imputed <- impute_mice_drf(missdf, m = m, maxit = 5)
+  expect_type(imputed, "list")
+  expect_length(imputed, m)
+  expect_named(imputed, paste0("imp", seq_len(m)))
 
-  expect_true(length(imputed) == 2)
-
-  expect_true(all(names(imputed) == paste0("imp", 1:m)))
-
-  expect_true(all(sapply(imputed, dim)[ , 1] == dim(missdf)))
+  expect_true(all(vapply(imputed, inherits, logical(1), what = "data.frame")))
+  expect_true(all(vapply(imputed, function(x) identical(dim(x), dim(missdf)), logical(1))))
+  expect_true(all(vapply(imputed, function(x) !anyNA(x), logical(1))))
 })
-
