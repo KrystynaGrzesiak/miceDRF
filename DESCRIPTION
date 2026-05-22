@@ -23,11 +23,8 @@ Imports:
     drf,
     mice
 Suggests:
-    knitr,
-    rmarkdown,
     spelling,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
 Language: en-US
 Config/testthat/edition: 3
 RoxygenNote: 7.3.3
