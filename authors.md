@@ -12,12 +12,12 @@
 Source:
 [`DESCRIPTION`](https://github.com/KrystynaGrzesiak/miceDRF/blob/master/DESCRIPTION)
 
-Grzesiak K, Näf J (2026). *miceDRF: Imputation with MICE and
+Grzesiak K, Näf J (2026). *miceDRF: Imputation with 'mice' and
 Distributional Random Forests*. R package version 0.1.0,
 <https://github.com/KrystynaGrzesiak/miceDRF>.
 
     @Manual{,
-      title = {miceDRF: Imputation with MICE and Distributional Random Forests},
+      title = {miceDRF: Imputation with 'mice' and Distributional Random Forests},
       author = {Krystyna Grzesiak and Jeffrey Näf},
       year = {2026},
       note = {R package version 0.1.0},
