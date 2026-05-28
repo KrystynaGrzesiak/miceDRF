@@ -1,107 +1,69 @@
-
-#' mice DRF (Distributional Random Forest)
+#' Imputation with Distributional Random Forests for 'mice'
 #'
-#' This function performs imputation using MICE and Distributional Random Forest
+#' Imputes missing values using distributional random forests within the
+#' multiple imputation by chained equations framework implemented in the
+#' \pkg{mice} package.
 #'
-#' @param missdf incomplete dataset with missing values denoted as NA's
-#' @param printFlag logical, indicating whether silent computations should be
-#' performed. Default to FALSE.
-#' @param m number of imputed datasets to generate
-#' @param ... used for compatibility with mice package.
-#'
-#' @return completed dataset
-#'
-#' @examples
-#' X <- matrix(rnorm(1000), nrow = 100)
-#' X[c(runif(700), rep(1, 300)) < 0.3] <- NA
-#' impute_mice_drf(X, printFlag = TRUE)
-#'
-#' @references
-#' This method is described in detail in:
-#'
-#' Näf, J., Scornet, E., & Josse, J. (2024).
-#' What is a good imputation under MAR missingness?. arXiv.
-#' \url{https://arxiv.org/abs/2403.19196}
-#'
-#' It's based on:
-#'
-#' Cevid, D., Michel, L., Näf, J., Meinshausen, N., and B¨ uhlmann, P. (2022).
-#' Distributional random forests: Heterogeneity adjustment and multivariate
-#' distributional regression. Journal of Machine Learning Research, 23(333):1–79.
-#'
-#' @export
-
-impute_mice_drf <- function (missdf, printFlag = FALSE, m = 1, ...) {
-
-  args <- list(...)
-  args <- args[setdiff(names(args), c("data", "method", "printFlag"))]
-
-  factor_vars <- as.vector(sapply(missdf, is.factor))
-
-  if(any(factor_vars)){
-    warning("Changing factor to numeric.")
-    missdf[] <- lapply(missdf, function(col) {
-      if (is.factor(col)) as.numeric(levels(col))[col] else col
-    })
-  }
-
-  args <- c(list(data = missdf, method = "DRF", printFlag = printFlag, m = m),
-            args)
-
-  imputed <- do.call(mice::mice, args)
-
-  if(m > 1) {
-    res <- lapply(1:m, function(i) mice::complete(imputed, i))
-    names(res) <- paste0("imp", 1:m)
-    return(res)
-  }
-
-  mice::complete(imputed)
-}
-
-
-#' mice DRF (Distributional Random Forest)
-#'
-#' This function performs imputation using MICE and Distributional Random Forest
+#' This function is called internally by \code{mice} when the imputation
+#' method is set to \code{"DRF"}. For each variable with missing values, a
+#' distributional random forest is fitted to the observed values using the
+#' remaining variables as predictors. Missing values are then imputed by
+#' sampling observed responses according to the forest weights.
 #'
 #' @importFrom drf drf
 #' @importFrom stats predict
 #'
 #' @param y Vector to be imputed.
-#' @param ry Logical vector indicating which elements of `y` are used to fit the
-#' imputation model (TRUE = observed).
-#' @param x Numeric design matrix with `length(y)` rows, containing predictors
-#' for `y` and no missing values.
-#' @param wy Logical vector indicating elements of `y` for which imputations are
-#' generated.
-#' @param min.node.size target minimum number of observations in each tree leaf
-#' in DRF. The default value is 5.
-#' @param num.features the number of random features to sample.
-#' @param num.trees number of trees in DRF. Default to 10.
-#' @param ... used for compatibility with \code{mice} package.
+#' @param ry Logical vector indicating which elements of \code{y} are observed
+#' and used to fit the imputation model.
+#' @param x Numeric design matrix with \code{length(y)} rows, containing
+#' predictors for \code{y}. The matrix should not contain missing values.
+#' @param wy Logical vector indicating elements of \code{y} for which
+#' imputations are generated. If \code{NULL}, defaults to \code{!ry}.
+#' @param min.node.size Target minimum number of observations in each tree leaf
+#' in the distributional random forest. Default is \code{1}.
+#' @param num.features Number of random features to sample at each split.
+#' Default is \code{10}.
+#' @param num.trees Number of trees in the distributional random forest.
+#' Default is \code{10}.
+#' @param ... Additional arguments passed by \code{mice} for compatibility with
+#' the \code{mice.impute} interface. Currently ignored.
+#'
+#' @return A numeric vector of imputed values for the entries of \code{y}
+#' indicated by \code{wy}. The vector has length \code{sum(wy)} and is
+#' returned to \code{mice} to replace the missing values in the current
+#' variable.
 #'
 #' @references
-#' This method is described in detail in:
+#' Näf, J., Scornet, E., and Josse, J. (2024).
+#' "What is a good imputation under MAR missingness?"
+#' \url{https://arxiv.org/abs/2403.19196}.
 #'
-#' Näf, J., Scornet, E., & Josse, J. (2024).
-#' What is a good imputation under MAR missingness?. arXiv.
-#' \url{https://arxiv.org/abs/2403.19196}
+#' Cevid, D., Michel, L., Näf, J., Meinshausen, N., and Buehlmann, P. (2022).
+#' "Distributional random forests: Heterogeneity adjustment and multivariate
+#' distributional regression."
+#' Journal of Machine Learning Research, 23(333), 1--79.
 #'
-#' It's based on:
+#' @examples
+#' library(mice)
 #'
-#' Cevid, D., Michel, L., Näf, J., Meinshausen, N., and B¨ uhlmann, P. (2022).
-#' Distributional random forests: Heterogeneity adjustment and multivariate
-#' distributional regression. Journal of Machine Learning Research, 23(333):1–79.
+#' set.seed(123)
+#' X <- matrix(rnorm(1000), nrow = 100)
+#' X[runif(length(X)) < 0.3] <- NA
+#'
+#' imp <- mice(X, method = "DRF", m = 1, maxit = 1, printFlag = FALSE)
+#' complete(imp)
 #'
 #' @export
 
 
-mice.impute.DRF <- function (y, ry, x, wy = NULL, min.node.size = 1,
+mice.impute.DRF <- function(y, ry, x, wy = NULL, min.node.size = 1,
                             num.features = 10, num.trees = 10, ...) {
+  if (is.null(wy)) {
+    wy <- !ry
+  }
 
-  if (is.null(wy)) wy <- !ry
-
-  if (dim(x)[2] == 0) {
+  if (ncol(x) == 0) {
     x <- cbind(x, 1)
     dimnames(x) <- list(NULL, "int")
   }
@@ -110,22 +72,25 @@ mice.impute.DRF <- function (y, ry, x, wy = NULL, min.node.size = 1,
   xmis <- x[wy, , drop = FALSE]
   yobs <- as.matrix(y[ry])
 
-  m <- 1
+  fit <- drf(
+    Y = yobs,
+    X = xobs,
+    num.trees = num.trees,
+    num.features = num.features,
+    compute.oob.predictions = FALSE,
+    min.node.size = min.node.size,
+    ci.group.size = 1
+  )
 
-  fit <- drf(Y = yobs,
-             X = xobs,
-             num.trees = num.trees,
-             num.features = num.features,
-             compute.oob.predictions = F,
-             min.node.size = min.node.size,
-             ci.group.size=1) #ci.group.size=num.trees, is also possible, but appears to be slower
+  drf_weights <- predict(fit, newdata = xmis)$weights
 
-  DRFw <- predict(fit, newdata = xmis)$weights # These are the nodes now
-
-  imputed <- vapply(1:nrow(xmis), function(s) {
-    yobs[sample(1:nrow(yobs), size = 1, replace = T, prob = DRFw[s, ]), ]
-  }, numeric(m))  # sample one observation per xmis
-
-  imputed
-
+  vapply(seq_len(nrow(xmis)), function(s) {
+    yobs[
+      sample(seq_len(nrow(yobs)), size = 1, replace = TRUE,
+             prob = drf_weights[s, ]),
+      1
+    ]
+  }, numeric(1))
 }
+
+

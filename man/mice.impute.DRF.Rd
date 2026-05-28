@@ -2,7 +2,7 @@
 % Please edit documentation in R/miceDRF.R
 \name{mice.impute.DRF}
 \alias{mice.impute.DRF}
-\title{mice DRF (Distributional Random Forest)}
+\title{Imputation with Distributional Random Forests for 'mice'}
 \usage{
 mice.impute.DRF(
   y,
@@ -18,37 +18,63 @@ mice.impute.DRF(
 \arguments{
 \item{y}{Vector to be imputed.}
 
-\item{ry}{Logical vector indicating which elements of `y` are used to fit the
-imputation model (TRUE = observed).}
+\item{ry}{Logical vector indicating which elements of \code{y} are observed
+and used to fit the imputation model.}
 
-\item{x}{Numeric design matrix with `length(y)` rows, containing predictors
-for `y` and no missing values.}
+\item{x}{Numeric design matrix with \code{length(y)} rows, containing
+predictors for \code{y}. The matrix should not contain missing values.}
 
-\item{wy}{Logical vector indicating elements of `y` for which imputations are
-generated.}
+\item{wy}{Logical vector indicating elements of \code{y} for which
+imputations are generated. If \code{NULL}, defaults to \code{!ry}.}
 
-\item{min.node.size}{target minimum number of observations in each tree leaf
-in DRF. The default value is 5.}
+\item{min.node.size}{Target minimum number of observations in each tree leaf
+in the distributional random forest. Default is \code{1}.}
 
-\item{num.features}{the number of random features to sample.}
+\item{num.features}{Number of random features to sample at each split.
+Default is \code{10}.}
 
-\item{num.trees}{number of trees in DRF. Default to 10.}
+\item{num.trees}{Number of trees in the distributional random forest.
+Default is \code{10}.}
 
-\item{...}{used for compatibility with \code{mice} package.}
+\item{...}{Additional arguments passed by \code{mice} for compatibility with
+the \code{mice.impute} interface. Currently ignored.}
+}
+\value{
+A numeric vector of imputed values for the entries of \code{y}
+indicated by \code{wy}. The vector has length \code{sum(wy)} and is
+returned to \code{mice} to replace the missing values in the current
+variable.
 }
 \description{
-This function performs imputation using MICE and Distributional Random Forest
+Imputes missing values using distributional random forests within the
+multiple imputation by chained equations framework implemented in the
+\pkg{mice} package.
+}
+\details{
+This function is called internally by \code{mice} when the imputation
+method is set to \code{"DRF"}. For each variable with missing values, a
+distributional random forest is fitted to the observed values using the
+remaining variables as predictors. Missing values are then imputed by
+sampling observed responses according to the forest weights.
+}
+\examples{
+library(mice)
+
+set.seed(123)
+X <- matrix(rnorm(1000), nrow = 100)
+X[runif(length(X)) < 0.3] <- NA
+
+imp <- mice(X, method = "DRF", m = 1, maxit = 1, printFlag = FALSE)
+complete(imp)
+
 }
 \references{
-This method is described in detail in:
+Näf, J., Scornet, E., and Josse, J. (2024).
+"What is a good imputation under MAR missingness?"
+\url{https://arxiv.org/abs/2403.19196}.
 
-Näf, J., Scornet, E., & Josse, J. (2024).
-What is a good imputation under MAR missingness?. arXiv.
-\url{https://arxiv.org/abs/2403.19196}
-
-It's based on:
-
-Cevid, D., Michel, L., Näf, J., Meinshausen, N., and B¨ uhlmann, P. (2022).
-Distributional random forests: Heterogeneity adjustment and multivariate
-distributional regression. Journal of Machine Learning Research, 23(333):1–79.
+Cevid, D., Michel, L., Näf, J., Meinshausen, N., and Buehlmann, P. (2022).
+"Distributional random forests: Heterogeneity adjustment and multivariate
+distributional regression."
+Journal of Machine Learning Research, 23(333), 1--79.
 }

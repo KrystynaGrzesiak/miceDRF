@@ -1,62 +1,97 @@
 library(testthat)
+library(mice)
 library(miceDRF)
 
-set.seed(123)
-
-missdf <- matrix(rnorm(20), ncol = 2)
-missdf[runif(length(missdf)) < 0.2] <- NA
-missdf <- as.data.frame(missdf)
-
-missdf_factor <- data.frame(
-  missdf,
-  fctr = factor(sample(1:3, nrow(missdf), replace = TRUE))
-)
-
-test_that("impute_mice_drf returns a completed data frame", {
+test_that("mice.impute.DRF imputes missing values through mice", {
   set.seed(123)
 
-  imputed <- impute_mice_drf(missdf, printFlag = FALSE, maxit = 2)
+  missdf <- matrix(rnorm(40), ncol = 2)
+  missdf[runif(length(missdf)) < 0.2] <- NA
+  missdf <- as.data.frame(missdf)
 
-  expect_s3_class(imputed, "data.frame")
-  expect_equal(dim(imputed), dim(missdf))
+  imp <- mice(
+    missdf,
+    method = "DRF",
+    m = 1,
+    maxit = 1,
+    printFlag = FALSE
+  )
+
+  completed <- complete(imp)
+
+  expect_s3_class(completed, "data.frame")
+  expect_equal(dim(completed), dim(missdf))
+  expect_false(anyNA(completed))
+})
+
+test_that("mice.impute.DRF returns one imputed value per missing entry", {
+  set.seed(123)
+
+  y <- c(1, 2, NA, 4, NA, 6)
+  ry <- !is.na(y)
+  x <- matrix(seq_along(y), ncol = 1)
+  wy <- is.na(y)
+
+  imputed <- mice.impute.DRF(
+    y = y,
+    ry = ry,
+    x = x,
+    wy = wy,
+    num.trees = 5,
+    num.features = 1
+  )
+
+  expect_type(imputed, "double")
+  expect_length(imputed, sum(wy))
   expect_false(anyNA(imputed))
 })
 
-test_that("impute_mice_drf warns and converts factor columns to numeric", {
+test_that("mice.impute.DRF uses !ry when wy is NULL", {
   set.seed(123)
 
-  expect_warning(
-    imputed <- impute_mice_drf(missdf_factor, printFlag = FALSE, maxit = 2),
-    "Changing factor to numeric\\."
+  y <- c(1, 2, NA, 4, NA, 6)
+  ry <- !is.na(y)
+  x <- matrix(seq_along(y), ncol = 1)
+
+  imputed <- mice.impute.DRF(
+    y = y,
+    ry = ry,
+    x = x,
+    wy = NULL,
+    num.trees = 5,
+    num.features = 1
   )
 
-  expect_s3_class(imputed, "data.frame")
-  expect_true(is.numeric(imputed[["fctr"]]))
+  expect_length(imputed, sum(!ry))
   expect_false(anyNA(imputed))
 })
 
-test_that("impute_mice_drf respects printFlag = TRUE", {
+
+test_that("mice.impute.DRF works with multiple imputations", {
   set.seed(123)
 
-  output <- capture.output(
-    impute_mice_drf(missdf, printFlag = TRUE, m = 1, maxit = 2)
+  missdf <- matrix(rnorm(40), ncol = 2)
+  missdf[runif(length(missdf)) < 0.2] <- NA
+  missdf <- as.data.frame(missdf)
+
+  imp <- mice(
+    missdf,
+    method = "DRF",
+    m = 2,
+    maxit = 1,
+    printFlag = FALSE
   )
 
-  expect_true(length(output) > 0)
-  expect_true(any(grepl("iter\\s+imp\\s+variable", output)))
+  completed_1 <- complete(imp, 1)
+  completed_2 <- complete(imp, 2)
+
+  expect_s3_class(completed_1, "data.frame")
+  expect_s3_class(completed_2, "data.frame")
+  expect_equal(dim(completed_1), dim(missdf))
+  expect_equal(dim(completed_2), dim(missdf))
+  expect_false(anyNA(completed_1))
+  expect_false(anyNA(completed_2))
 })
 
-test_that("impute_mice_drf returns multiple imputations when m > 1", {
-  set.seed(123)
 
-  m <- 2
-  imputed <- impute_mice_drf(missdf, m = m, printFlag = FALSE, maxit = 2)
 
-  expect_type(imputed, "list")
-  expect_length(imputed, m)
-  expect_named(imputed, paste0("imp", seq_len(m)))
-
-  expect_true(all(vapply(imputed, inherits, logical(1), what = "data.frame")))
-  expect_true(all(vapply(imputed, function(x) identical(dim(x), dim(missdf)), logical(1))))
-  expect_true(all(vapply(imputed, function(x) !anyNA(x), logical(1))))
-})

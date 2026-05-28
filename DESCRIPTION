@@ -1,6 +1,6 @@
 Package: miceDRF
 Type: Package
-Title: Imputation with MICE and Distributional Random Forests
+Title: Imputation with 'mice' and Distributional Random Forests
 Version: 0.1.0
 Authors@R: c(person(
         "Krystyna", "Grzesiak",
@@ -12,17 +12,24 @@ Authors@R: c(person(
         email = "jeffrey@my-sh.ch",
         role = "aut",
         comment = c(ORCID = "0000-0003-0920-1899")))
-Description: Provides a custom imputation method for the 'mice' framework
-    using distributional random forests.
+Description: Provides a custom imputation method for the 'mice' package
+    based on distributional random forests. The package implements the
+    'mice.impute.DRF' method, which can be used within the standard
+    'mice' workflow. Missing values are imputed by estimating
+    conditional distributions with distributional random forests and
+    sampling observed responses using forest weights. The method is based
+    on Näf, Scornet and Josse (2024) <https://arxiv.org/abs/2403.19196>
+    and uses distributional random forests as introduced by Cevid et al.
+    (2022) <doi:10.5555/3586589.3586922>.
 License: GPL-3
 Encoding: UTF-8
 URL: https://github.com/KrystynaGrzesiak/miceDRF,
     https://krystynagrzesiak.github.io/miceDRF/
 BugReports: https://github.com/KrystynaGrzesiak/miceDRF/issues
 Imports:
-    drf,
-    mice
+    drf
 Suggests:
+    mice,
     spelling,
     testthat (>= 3.0.0)
 Language: en-US
