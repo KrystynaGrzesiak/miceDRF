@@ -2,6 +2,9 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/KrystynaGrzesiak/miceDRF/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KrystynaGrzesiak/miceDRF/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/miceDRF)](https://CRAN.R-project.org/package=miceDRF)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/miceDRF)](https://CRAN.R-project.org/package=miceDRF)
+[![pkgdown](https://img.shields.io/badge/pkgdown-reference-blue)](https://krystynagrzesiak.github.io/miceDRF/)
 <!-- badges: end -->
 
 `miceDRF` provides an imputation method for the
