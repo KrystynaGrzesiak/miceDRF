@@ -25,7 +25,13 @@ method = "DRF"
 
 ## Installation
 
-Install the development version from GitHub with:
+The `miceDRF` package can be intstalled from CRAN:
+
+```r
+install.packages("miceDRF")
+```
+
+To install the development version run:
 
 ```r
 if (!requireNamespace("devtools", quietly = TRUE)) {
@@ -78,7 +84,7 @@ Journal of Machine Learning Research, 23(333), 1–79.
 
 If you use `miceDRF` in your research, please cite:
 
-Näf, J., Grzesiak, K., and Scornet, E. (2025).
-*How to rank imputation methods?*
-arXiv preprint arXiv:2507.11297.
-https://doi.org/10.48550/arXiv.2507.11297
+Jeffrey Näf, Erwan Scornet, Julie Josse (2026).
+*What Is a Good Imputation Under MAR Missingness?*
+arXiv preprint arXiv:2403.19196.
+https://arxiv.org/abs/2403.19196
