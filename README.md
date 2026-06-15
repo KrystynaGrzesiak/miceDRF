@@ -17,12 +17,6 @@ than only conditional means. This allows flexible imputation of complex
 data structures, nonlinear effects, and heterogeneous conditional
 distributions.
 
-The method can be used directly within the standard `mice` workflow via:
-
-```r
-method = "DRF"
-```
-
 ## Installation
 
 The `miceDRF` package can be intstalled from CRAN:
@@ -42,6 +36,13 @@ devtools::install_github("KrystynaGrzesiak/miceDRF")
 ```
 
 ## Example
+
+
+The method can be used directly within the standard `mice` workflow via:
+
+```r
+method = "DRF"
+```
 
 ```r
 library(mice)
