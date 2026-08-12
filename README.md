@@ -1,5 +1,7 @@
 # miceDRF: Imputation with Distributional Random Forests in MICE
 
+<img src="man/figures/micedrf.png" align="right" height="180" alt="miceDRF logo" />
+
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/KrystynaGrzesiak/miceDRF/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KrystynaGrzesiak/miceDRF/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/miceDRF)](https://CRAN.R-project.org/package=miceDRF)
@@ -89,3 +91,9 @@ Jeffrey Näf, Erwan Scornet, Julie Josse (2026).
 *What Is a Good Imputation Under MAR Missingness?*
 arXiv preprint arXiv:2403.19196.
 https://arxiv.org/abs/2403.19196
+
+## Logo
+
+The micedrf logo is a playful mashup inspired by the mice and drf projects and incorporates adapted graphical elements from their logos.
+
+The original mice sticker was designed by Jaden M. Walters. All rights to the original graphical elements remain with their respective authors and projects.
